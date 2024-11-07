@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -13,21 +12,22 @@
     </div>
     <div class="container">
         <h2>Login</h2>
-        <div>
+        
+        <!-- Formulário de Login -->
+        <form action="/" method="POST">  <!-- Envia dados de login para a rota de login -->
             <div>
                 <label for="email">Email</label>
-                <input type="email">
+                <input type="email" name="email" required>
             </div>
             <div>
                 <label for="senha">Senha</label>
-                <input type="password">
+                <input type="password" name="senha" required>
             </div>
-        </div>
-        <div>
-            <button>Entrar</button>
-            <div class="register">
-                Cadastrar
-            </div>
+            <button type="submit">Entrar</button> <!-- Botão de envio do formulário -->
+        </form>
+
+        <div class="register">
+            <a href="/register">Cadastrar</a> <!-- Link para página de cadastro -->
         </div>
     </div>
 </body>

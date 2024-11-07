@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
-
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -13,30 +12,30 @@
     </div>
     <div class="container">
         <h2>Cadastro</h2>
-        <div>
+        
+        <!-- Formulário de Cadastro -->
+        <form action="/register" method="POST">  <!-- Envia dados de cadastro para a rota /register -->
             <div>
                 <label for="nome">Nome</label>
-                <input type="nome">
+                <input type="text" name="nome" required>
             </div>
             <div>
                 <label for="email">Email</label>
-                <input type="email">
+                <input type="email" name="email" required>
             </div>
             <div>
                 <label for="senha">Senha</label>
-                <input type="password">
+                <input type="password" name="senha" required>
             </div>
             <div>
-                <label for="senha">Confirmar Senha</label>
-                <input type="password">
+                <label for="confirmar_senha">Confirmar Senha</label>
+                <input type="password" name="confirmar_senha" required>
             </div>
-        </div>
-        
-        <div>
-            <button>Cadastrar</button>
-            <div class="register">
-                Login
-            </div>
+            <button type="submit">Cadastrar</button> <!-- Botão de envio do formulário -->
+        </form>
+
+        <div class="register">
+            <a href="/">Login</a> <!-- Link para página de login -->
         </div>
     </div>
 </body>
