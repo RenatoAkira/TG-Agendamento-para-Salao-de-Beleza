@@ -1,72 +1,118 @@
-html{
+html {
     font-family: Arial, Helvetica, sans-serif;
-}
-
-header{
+  }
+  
+  body {
+    margin: 0;
+    padding-bottom: 100px;
+  }
+  
+  header {
     background-color: #d9a1c5;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     position: fixed;
     width: 100%;
     top: 0;
-    margin: 0px;
+    padding: 10px 0;
+    z-index: 1;
 }
 
-.display-flex{
-    display: flex;
-    margin: auto;
-    justify-content: space-around;
-}
-
-.servico{
-    border: solid 1px #8b2969;
-    margin: 10px;
-    width: 50%;
-    border-radius: 6px;
-}
-.preco{
-    font-size: 20px;
-    margin-bottom: 6px;
-    font-weight: bolder;
-}
-.duracao{
-    font-size: 14px;
-}
-
-.logo{
-    margin: auto;
-    justify-content: center;
-    padding-top: 10px;
-}
-
-.servicos-agendamentos{
-    margin: 0px 7% auto;
-    display: flex;
-    flex-direction: row-reverse;
-    flex-wrap: wrap-reverse; 
-}
-
-button{
-    border: 0;
-    background-color: #d9a1c5;
-    padding: 6px;
-}
-.btn-agendar{
-    margin: 10px;
-    padding: 16px;
-    
-}
-
-h1{
-    text-align: center;
-    padding: 20px;
-    margin-top: 200px;
-}
-h3{
-    padding-left: 30px;
-}
-
-img{
+.logo img {
     border-radius: 10px;
     margin: auto;
     display: block;
 }
+  
+  .servicos-agendamentos {
+    margin: 0px 7% auto;
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse;
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+  
+  button {
+    border: 0;
+    background-color: #d9a1c5;
+    padding: 6px 12px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  main {
+    padding-top: 200px;
+  }
+  
+  h1 {
+    text-align: center;
+    padding: 20px;
+    margin-top: 0;
+    color: #8b2969;
+  }
+  
+  .lista-servicos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0 5%;
+  }
+  
+  .servico {
+    background-color: #fdf1f8;
+    border: 2px solid #d9a1c5;
+    border-radius: 12px;
+    padding: 16px 24px;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  
+  .info-servico {
+    text-align: left;
+    max-width: 75%;
+  }
+  
+  .servico h3 {
+    margin: 0 0 8px;
+    color: #8b2969;
+  }
+  
+  .servico p {
+    margin: 0 0 10px;
+    font-size: 14px;
+  }
+  
+  .detalhes {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .preco {
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 20px;
+  }
+  
+  .duracao {
+    color: #777;
+  }
+  
+  .btn-agendar {
+    background-color: #8b2969;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .btn-agendar:hover {
+    background-color: #a33b85;
+  }
+  
