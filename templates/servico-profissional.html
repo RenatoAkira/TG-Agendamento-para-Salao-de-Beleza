@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil do Profissional</title>
+  <link rel="stylesheet" href="/static/css/style-servico-profissional.css" />
+</head>
+<body>
+  <header>
+    <h1>Perfil do Profissional</h1>
+  </header>
+
+  <main>
+    <div class="perfil">
+      <img src="/static/img/profissional.jpg" alt="Foto do Profissional" class="foto-perfil" />
+      <div class="dados-profissional">
+        <h2>Nome do Profissional</h2>
+        <p><strong>Telefone:</strong> (11) 99999-9999</p>
+        <p><strong>E-mail:</strong> exemplo@email.com</p>
+      </div>
+    </div>
+
+    <form class="form-atribuir-servico">
+      <label for="servico">Atribuir Serviço:</label>
+      <select id="servico" name="servico" required>
+        <option value="" disabled selected>Selecione um serviço</option>
+        <option value="corte">Corte</option>
+        <option value="manicure">Manicure</option>
+        <option value="hidratação">Hidratação</option>
+        <!-- Adicione mais conforme necessário -->
+      </select>
+
+      <button type="submit">Atribuir</button>
+    </form>
+  </main>
+</body>
+</html>

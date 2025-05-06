@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastrar Cliente</title>
+  <link rel="stylesheet" href="/static/css/style-cadastrar-cliente.css" />
+</head>
+<body>
+  <header>
+    <h1>Cadastrar Novo Cliente</h1>
+  </header>
+
+  <main>
+    <form class="form-cliente">
+      <label for="nome">Nome Completo:</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="telefone">Telefone:</label>
+      <input type="tel" id="telefone" name="telefone" placeholder="(99) 99999-9999" required />
+
+      <label for="email">E-mail:</label>
+      <input type="email" id="email" name="email" required />
+
+      <button type="submit">Salvar Cliente</button>
+    </form>
+  </main>
+</body>
+</html>

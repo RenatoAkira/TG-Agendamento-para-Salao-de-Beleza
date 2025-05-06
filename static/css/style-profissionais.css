@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background-color: #f8f1f5;
+  }
+  
+  header {
+    background-color: #8b2969;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  main {
+    padding: 40px 10%;
+  }
+  
+  .topo {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .btn-novo {
+    background-color: #d9a1c5;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .btn-novo:hover {
+    background-color: #a33b85;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  th, td {
+    padding: 14px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  th {
+    background-color: #f0d3e4;
+    color: #8b2969;
+    font-weight: bold;
+  }
+  
+  tbody tr:hover {
+    background-color: #f9e9f2;
+  }
+  
