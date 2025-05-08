@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background-color: #f8f1f5;
+  }
+  
+  header {
+    background-color: #8b2969;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  main {
+    padding: 30px 10%;
+  }
+  
+  .paginacao-datas {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .data {
+    background-color: #f0d7e6;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #8b2969;
+    transition: background 0.3s;
+  }
+  
+  .data:hover {
+    background-color: #d9a1c5;
+    color: white;
+  }
+  
+  .data.ativo {
+    background-color: #8b2969;
+    color: white;
+  }
+  
+  .lista-agendamentos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .agendamento {
+    background-color: white;
+    padding: 20px;
+    border-left: 6px solid #d9a1c5;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  
+  .agendamento h3 {
+    margin-top: 0;
+    color: #8b2969;
+  }
+  
+  .status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 10px;
+  }
+  
+  .status.confirmado {
+    background-color: #d9f7e1;
+    color: #2e7d32;
+  }
+  

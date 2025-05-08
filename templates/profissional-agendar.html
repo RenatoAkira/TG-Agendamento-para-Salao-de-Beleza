@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agendar Serviço</title>
+  <link rel="stylesheet" href="/static/css/style-profissional-agendar.css" />
+</head>
+<body>
+  <header>
+    <h1>Agendar Serviço para Cliente</h1>
+  </header>
+
+  <main>
+    <form class="form-agendamento">
+      <label for="cliente">Cliente:</label>
+      <select id="cliente" name="cliente">
+        <option value="">Selecione um cliente</option>
+        <option value="maria">Maria Silva</option>
+        <option value="joao">João Santos</option>
+      </select>
+
+      <label for="servico">Serviço:</label>
+      <select id="servico" name="servico">
+        <option value="">Selecione um serviço</option>
+        <option value="corte">Corte de Cabelo</option>
+        <option value="barba">Barba</option>
+        <option value="manicure">Manicure</option>
+      </select>
+
+      <label for="data">Data:</label>
+      <input type="date" id="data" name="data" />
+
+      <label for="horario">Horário:</label>
+      <input type="time" id="horario" name="horario" />
+
+      <div class="btn-confirmar-container">
+        <button type="submit" class="btn-confirmar">Confirmar Agendamento</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
