@@ -50,6 +50,33 @@ html {
     margin-top: 0;
     color: #8b2969;
   }
+
+  .search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .search-container input {
+    width: 300px;
+    padding: 10px;
+    border-radius: 6px 0 0 6px;
+    border: 1px solid #ccc;
+    outline: none;
+  }
+  
+  .search-container button {
+    background-color: #8b2969;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+  }
+  
+  .search-container button:hover {
+    background-color: #6e1f52;
+  }
   
   .lista-servicos {
     display: flex;
