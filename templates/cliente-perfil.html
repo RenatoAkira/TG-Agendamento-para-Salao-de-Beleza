@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil do Cliente</title>
+  <link rel="stylesheet" href="/static/css/style-cliente-perfil.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
+
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/static/img/LogoSalao2.png" width="500px" alt="Logo do Salão" />
+    </div>
+    <a class="btn-inicio">
+          <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Logo do Salão">
+    </a>
+  </header>
+
+  <main>
+    <div class="perfil-cliente">
+      <div class="topo-perfil">
+        <div class="dados-cliente">
+          <h2>Gabriel Carvalho</h2>
+          <p><strong>Telefone:</strong> (11) 91234-5678</p>
+          <p><strong>E-mail:</strong> cliente@email.com</p>
+        </div>
+      </div>
+
+      <form class="form-perfil">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="Gabriel Carvalho" required />
+
+        <label for="telefone">Telefone:</label>
+        <input type="tel" id="telefone" name="telefone" value="(11) 91234-5678" required />
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" value="cliente@email.com" required />
+
+        <label for="senha">Nova Senha:</label>
+        <input type="password" id="senha" name="senha" placeholder="Digite nova senha" />
+
+        <label for="confirmar-senha">Confirmar Senha:</label>
+        <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Confirme nova senha" />
+
+        <button type="submit">Salvar Alterações</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

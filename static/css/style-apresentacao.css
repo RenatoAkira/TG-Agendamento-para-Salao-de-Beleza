@@ -72,4 +72,39 @@ body {
     color: #333;
     line-height: 1.6;
   }
-  
+
+  .auth-buttons .btn-servicos {
+  text-decoration: none;
+  background-color: #8b2969;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background 0.3s;
+  display: inline-block;
+}
+
+.auth-buttons .btn-servicos:hover {
+  background-color: #6e1f52;
+}
+ 
+.servicos-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
+  margin-top: 90px; /* espaço abaixo do header fixo */
+}
+
+.btn-servicos {
+  text-decoration: none;
+  background-color: #8b2969;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-servicos:hover {
+  background-color: #6e1f52;
+}

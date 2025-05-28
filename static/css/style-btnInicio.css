@@ -1,0 +1,20 @@
+.btn-inicio {
+  text-decoration: none;
+  background-color: #8b2969;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.3s;
+}
+
+.btn-inicio:hover {
+  background-color: #6e1f52;
+}
+
+.btn-inicio i {
+  font-size: 16px;
+}
