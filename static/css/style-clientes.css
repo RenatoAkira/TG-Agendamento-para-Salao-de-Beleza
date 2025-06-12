@@ -22,21 +22,6 @@ body {
     margin-bottom: 20px;
   }
   
-  .btn-novo {
-    background-color: #d9a1c5;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .btn-novo:hover {
-    background-color: #a33b85;
-  }
-  
   table {
     width: 100%;
     border-collapse: collapse;
