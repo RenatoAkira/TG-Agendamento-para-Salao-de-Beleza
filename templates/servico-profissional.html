@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Perfil do Profissional</title>
   <link rel="stylesheet" href="/static/css/style-servico-profissional.css" />
 </head>
@@ -34,9 +34,24 @@
         <option value="manicure">Manicure</option>
         <option value="hidratação">Hidratação</option>
       </select>
-
       <button type="submit">Atribuir</button>
     </form>
+
+    <section class="agenda">
+      <h3>Montar Agenda do Profissional</h3>
+      <form id="form-agenda">
+        <div>
+          <label for="data">Data:</label>
+          <input type="date" id="data" name="data" required />
+        </div>
+        <div>
+          <label for="horario">Horário:</label>
+          <input type="time" id="horario" name="horario" required />
+        </div>
+        <button type="submit">Adicionar Horário</button>
+      </form>
+    </section>
   </main>
 </body>
 </html>
+

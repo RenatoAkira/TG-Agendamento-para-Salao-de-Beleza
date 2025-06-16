@@ -1,110 +1,117 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f8f1f5;
-    margin: 0;
-  }
-  
-  header {
-    background-color: #d9a1c5;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-  }
-  
-  .header-content {
-    max-width: 1200px;
-    margin: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-  }
-  
-  .logo img {
-    border-radius: 10px;
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .auth-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .auth-buttons button {
-    border: none;
-    background-color: #8b2969;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .auth-buttons button:hover {
-    background-color: #6e1f52;
-  }
-  
-  main {
-    padding: 160px 20px 60px;
-    max-width: 800px;
-    margin: auto;
-  }
-  
-  .sobre-salao {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.05);
-    text-align: center;
-  }
-  
-  .sobre-salao h1 {
-    color: #8b2969;
-    margin-bottom: 20px;
-  }
-  
-  .sobre-salao p {
-    font-size: 18px;
-    color: #333;
-    line-height: 1.6;
-  }
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f1f5;
+  margin: 0;
+}
 
-  .auth-buttons .btn-servicos {
-  text-decoration: none;
+header {
+  background-color: #d9a1c5;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.header-content {
+  max-width: 100%;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-img {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+  transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+  .logo-img {
+    max-width: 250px;
+  }
+}
+
+.auth-buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.auth-buttons button {
+  border: none;
   background-color: #8b2969;
   color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
   transition: background 0.3s;
-  display: inline-block;
 }
 
-.auth-buttons .btn-servicos:hover {
+.auth-buttons button:hover {
   background-color: #6e1f52;
 }
- 
+
 .servicos-container {
   display: flex;
-  justify-content: flex-end;
-  padding: 10px 20px;
-  margin-top: 90px; /* espaço abaixo do header fixo */
+  justify-content: center;
+  margin-top: 130px; 
+  margin-bottom: 40px;
 }
 
 .btn-servicos {
   text-decoration: none;
   background-color: #8b2969;
   color: white;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-weight: bold;
-  transition: background 0.3s;
+  padding: 18px 36px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 20px;
+  transition: transform 0.2s ease, background 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .btn-servicos:hover {
   background-color: #6e1f52;
+  transform: scale(1.05);
 }
+
+main {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.sobre-salao {
+  background-color: #fff0f7;
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 16px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.sobre-salao h1 {
+  color: #8b2969;
+  margin-bottom: 30px;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.sobre-salao p {
+  font-size: 20px;
+  color: #333;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+
+
