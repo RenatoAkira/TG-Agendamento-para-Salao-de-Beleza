@@ -467,25 +467,23 @@ def profissional_agendar():
 
     form = AgendamentoForm()
 
-    # Preenche os serviços que o profissional oferece
+    # Carrega os serviços do profissional
     servicos_profissional = db.session.query(Servico).join(ProfissionalServico).filter(
         ProfissionalServico.idProfissional == current_user.idProfissional
     ).all()
     form.servico_id.choices = [(s.idServico, s.nome) for s in servicos_profissional]
     form.profissional_id.choices = [(current_user.idProfissional, current_user.nome)]
 
-    # Se o POST veio para carregar os horários da data escolhida
-    if form.data.data and (request.method == 'POST' and request.form.get('carregar_horarios') == '1'):
+    # Caso seja um POST só para recarregar os horários
+    if request.method == 'POST' and request.form.get('carregar_horarios') == '1' and form.data.data:
         dia_semana = form.data.data.weekday()
 
-        # Horários da agenda
         agendas = Agenda.query.filter_by(
             idProfissional=current_user.idProfissional,
             diaSemana=dia_semana,
             status='ativo'
         ).all()
 
-        # Horários ocupados
         agendados = (
             Agendamento.query
             .join(ProfissionalServico)
@@ -499,64 +497,57 @@ def profissional_agendar():
         )
         horarios_ocupados = [a.horaInicio for a in agendados]
 
-        # Preenche os horários livres
         horarios_livres = []
         for agenda in agendas:
             if agenda.horaInicio not in horarios_ocupados:
-                horarios_livres.append((agenda.horaInicio.strftime('%H:%M'), agenda.horaInicio.strftime('%H:%M')))
+                horarios_livres.append((agenda.horaInicio, agenda.horaInicio.strftime('%H:%M')))
 
         form.horario.choices = horarios_livres
+        return render_template('profissional-agendar.html', form=form)
 
-    # Se for um POST final (tentando agendar)
-    if request.method == 'POST' and request.form.get('carregar_horarios') != '1':
+    # Se for o POST final de agendamento
+    elif request.method == 'POST' and request.form.get('carregar_horarios') != '1':
         horario_str = request.form.get('horario')
-
         if not horario_str:
-            flash('Por favor, selecione um horário antes de confirmar o agendamento.', 'error')
+            flash('Por favor, selecione um horário.', 'error')
             return redirect(url_for('profissional_agendar'))
 
         try:
-            horario_obj = datetime.strptime(horario_str, '%H:%M').time()
+            form.horario.data = datetime.strptime(horario_str, '%H:%M').time()
         except ValueError:
             flash('Horário inválido.', 'error')
             return redirect(url_for('profissional_agendar'))
 
-        # Corrige manualmente o campo horario para o Flask-WTF aceitar
-        form.horario.data = horario_obj
-
-        if form.validate_on_submit():
-            cliente_nome = form.cliente_nome.data
-            cliente_telefone = form.cliente_telefone.data
-            cliente_email = form.cliente_email.data
-            data_agendamento = form.data.data
-            servico_id = form.servico_id.data
-
-            # Busca ou cria o cliente
-            cliente = Cliente.query.filter_by(telefone=cliente_telefone).first()
+        if form.validate():
+            cliente = Cliente.query.filter_by(telefone=form.cliente_telefone.data).first()
             if not cliente:
-                cliente = Cliente(nome=cliente_nome, telefone=cliente_telefone, email=cliente_email)
+                cliente = Cliente(
+                    nome=form.cliente_nome.data,
+                    telefone=form.cliente_telefone.data,
+                    email=form.cliente_email.data
+                )
                 cliente.set_password("123456")
                 db.session.add(cliente)
                 db.session.flush()
 
             profissional_servico = ProfissionalServico.query.filter_by(
                 idProfissional=current_user.idProfissional,
-                idServico=servico_id
+                idServico=form.servico_id.data
             ).first()
 
             if not profissional_servico:
                 flash('Este profissional não oferece o serviço selecionado.', 'error')
                 return redirect(url_for('profissional_agendar'))
 
-            servico = Servico.query.get(servico_id)
+            servico = Servico.query.get(form.servico_id.data)
             duracao = timedelta(minutes=servico.duracao)
-            hora_fim = (datetime.combine(date.today(), horario_obj) + duracao).time()
+            hora_fim = (datetime.combine(date.today(), form.horario.data) + duracao).time()
 
             novo_agendamento = Agendamento(
                 idCliente=cliente.idCliente,
                 idProfissionalServico=profissional_servico.idProfissionalServico,
-                data=data_agendamento,
-                horaInicio=horario_obj,
+                data=form.data.data,
+                horaInicio=form.horario.data,
                 horaFim=hora_fim,
                 status='pendente'
             )
@@ -565,9 +556,6 @@ def profissional_agendar():
             db.session.commit()
             flash('Agendamento realizado com sucesso!', 'success')
             return redirect(url_for('profissional_inicio'))
-        else:
-            flash('Por favor, preencha todos os campos obrigatórios corretamente.', 'error')
-            return redirect(url_for('profissional_agendar'))
 
     return render_template('profissional-agendar.html', form=form)
 
