@@ -1,0 +1,96 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f1f5; 
+  margin: 0;
+}
+
+header {
+  background-color: #d9a1c5; 
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  position: relative;
+}
+
+.logo img {
+  max-width: 330px; 
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.03);
+}
+
+.perfil-usuario {
+  position: absolute;
+  top: 50%;
+  right: 100px;
+  transform: translateY(-50%);
+  font-size: 50px;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  z-index: 101;
+}
+
+.perfil-usuario:hover {
+  color: #6e1f52; 
+}
+
+main {
+  padding-top: 180px; 
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 60px;
+  color: #8b2969; 
+  font-weight: 700;
+}
+
+.menu-opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.btn-menu {
+  background-color: #8b2969;
+  border: none;
+  padding: 20px 60px;
+  font-size: 22px;
+  border-radius: 16px;
+  cursor: pointer;
+  width: 300px;
+  color: white;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-menu:hover {
+  background-color: #6e1f52;
+  transform: scale(1.05);
+}
+
+
+
+
+
+
+
+
+

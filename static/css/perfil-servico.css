@@ -1,0 +1,90 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background-color: #f8f1f5;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #8b2969;
+  color: white;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 15%;
+}
+
+.perfil {
+  background-color: white;
+  padding: 50px 60px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  max-width: 650px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.dados-servico h2 {
+  margin: 0;
+  color: #8b2969;
+  font-size: 36px; /* maior */
+  font-weight: 700;
+}
+
+.dados-servico p {
+  margin: 10px 0;
+  font-size: 24px; /* maior */
+}
+
+.acoes-servico {
+  margin-top: 30px;
+  display: flex;
+  gap: 25px;
+  justify-content: flex-start;
+}
+
+.btn-editar {
+  background-color: #8b2969;
+  color: white;
+  border: none;
+  padding: 18px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-editar:hover {
+  background-color: #6a1f50;
+}
+
+.btn-excluir {
+  background-color: #b02e2e;
+  color: white;
+  border: none;
+  padding: 18px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-excluir:hover {
+  background-color: #801f1f;
+}

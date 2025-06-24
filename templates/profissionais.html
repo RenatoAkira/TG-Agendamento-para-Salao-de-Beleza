@@ -1,41 +1,55 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profissionais - Admin</title>
-  <link rel="stylesheet" href="/static/css/style-profissionais.css" />
+  <link rel="stylesheet" href="/static/css/style-profissionais.css">
 </head>
 <body>
   <header>
-    <h1>Profissionais</h1>
+    <h1>Lista de Profissionais</h1>
   </header>
 
   <main>
     <div class="topo">
-      <button class="btn-novo">Cadastrar novo profissional</button>
+      <a href="{{ url_for('cadastrar_profissional') }}">
+        <button class="btn-novo">Cadastrar Novo Profissional</button>
+      </a>
     </div>
 
     <table>
       <thead>
         <tr>
           <th>Nome</th>
-          <th>Especialidade</th>
+          <th>Especialidades</th>
           <th>Telefone</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Mariana Costa</td>
-          <td>Manicure</td>
-          <td>(11) 90000-1234</td>
-        </tr>
-        <tr>
-          <td>Lucas Almeida</td>
-          <td>Cabeleireiro</td>
-          <td>(11) 98888-5678</td>
-        </tr>
-        <!-- Outras linhas podem ser adicionadas dinamicamente -->
+        {% if profissionais %}
+          {% for profissional in profissionais %}
+            <tr>
+              <td>{{ profissional.nome }}</td>
+              <td>
+                {% for servico in profissional.servicos %}
+                  {{ servico.nome }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+              </td>
+              <td>{{ profissional.telefone }}</td>
+              <td>
+                <a href="{{ url_for('servico_profissional', profissional_id=profissional.idProfissional) }}">
+                  <button>Ver Perfil</button>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="4">Nenhum profissional cadastrado.</td>
+          </tr>
+        {% endif %}
       </tbody>
     </table>
   </main>

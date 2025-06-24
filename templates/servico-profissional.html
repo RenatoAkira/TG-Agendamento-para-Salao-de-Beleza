@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perfil do Profissional</title>
-  <link rel="stylesheet" href="/static/css/style-servico-profissional.css" />
+  <link rel="stylesheet" href="/static/css/style-servico-profissional.css">
 </head>
 <body>
   <header>
@@ -13,30 +13,46 @@
 
   <main>
     <div class="perfil">
-      <img src="/static/img/maria.PNG" alt="Foto do Profissional" class="foto-perfil" />
+      <img src="{{ url_for('static', filename='img/default-user.png') }}" alt="Foto do Profissional" class="foto-perfil">
       <div class="dados-profissional">
-        <h2>Nome do Profissional</h2>
-        <p><strong>Telefone:</strong> (11) 99999-9999</p>
-        <p><strong>E-mail:</strong> exemplo@email.com</p>
+        <h2>{{ profissional.nome }}</h2>
+        <p><strong>Telefone:</strong> {{ profissional.telefone }}</p>
+        <p><strong>E-mail:</strong> {{ profissional.email }}</p>
 
         <div class="acoes-profissional">
-          <button class="btn-editar">Editar</button>
-          <button class="btn-excluir">Excluir</button>
+          <a href="{{ url_for('editar_profissional', profissional_id=profissional.idProfissional) }}">
+            <button class="btn-editar">Editar</button>
+          </a>
+          <a href="{{ url_for('excluir_profissional', profissional_id=profissional.idProfissional) }}">
+            <button class="btn-excluir">Excluir</button>
+          </a>
         </div>
       </div>
     </div>
 
-    <form class="form-atribuir-servico">
-      <label for="servico">Atribuir Serviço:</label>
-      <select id="servico" name="servico" required>
-        <option value="" disabled selected>Selecione um serviço</option>
-        <option value="corte">Corte</option>
-        <option value="manicure">Manicure</option>
-        <option value="hidratação">Hidratação</option>
-      </select>
+    <form method="POST" action="{{ url_for('atribuir_servico', profissional_id=profissional.idProfissional) }}">
+      {{ form.hidden_tag() }}
+      <label>{{ form.servico_id.label }}</label>
+      {{ form.servico_id(class_='form-control') }}
 
-      <button type="submit">Atribuir</button>
+      <button type="submit">{{ form.submit.label }}</button>
     </form>
+
+    <section class="agenda">
+      <h3>Montar Agenda do Profissional</h3>
+      <form method="POST" action="{{ url_for('adicionar_disponibilidade', profissional_id=profissional.idProfissional) }}">
+        {{ agenda_form.hidden_tag() }}
+        <div>
+          <label>{{ agenda_form.data.label }}</label>
+          {{ agenda_form.data(class_='form-control') }}
+        </div>
+        <div>
+          <label>{{ agenda_form.horario.label }}</label>
+          {{ agenda_form.horario(class_='form-control') }}
+        </div>
+        <button type="submit">{{ agenda_form.submit.label }}</button>
+      </form>
+    </section>
   </main>
 </body>
 </html>

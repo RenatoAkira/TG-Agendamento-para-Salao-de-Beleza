@@ -1,54 +1,118 @@
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-}
-h1{
-    color: #c786b0;
-    font-size: 40px;
-}
-h2{
-    padding-top: 10px;
-}
-.container{
-    background-color:  #d9a1c5;
-    width: 80%;
-    margin: auto;
-    max-width: 600px;
-    color: white;
-    border-radius: 10px;
+* {
+  box-sizing: border-box;
 }
 
-.display-flex{
-    display: flex;
-    margin: auto;
-    justify-content: center;
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f1f5;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-input{
-    margin: 16px;
-    width: 50%;
-    padding: 6px;
-    border-radius: 6px;
-    border: 0;
-}
-label{
-    font-size: 16px;
-    font-weight: bold;
-    width: 70px;
-    display: inline-block;
+.login-wrapper {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
 }
 
-button{
-    background-color: white;
-    border: 0;
-    padding: 6px;
-    margin-top: 20px;
-    width: 40%;
-    font-size: 16px;
-    border-radius: 6px;
+.login-container {
+  background-color: #d9a1c5;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+  padding: 60px 40px;
+  text-align: center;
+  transition: 0.3s;
 }
-.register{
-    padding-top: 6px;
-    padding-bottom: 20px;
+
+.logo-login {
+  max-width: 400px;
+  height: auto;
+  margin-bottom: 30px;
+  border-radius: 8px;
 }
+
+h2 {
+  color: white;
+  margin-bottom: 30px;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: white;
+  font-size: 16px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  background-color: white;
+  color: #8b2969;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #f2d3e3;
+  transform: scale(1.02);
+}
+
+.register {
+  margin-top: 20px;
+}
+
+.register a {
+  color: #ffffff;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-wrapper {
+    max-width: 90%;
+  }
+
+  .login-container {
+    padding: 40px 25px;
+  }
+
+  .logo-login {
+    max-width: 250px;
+  }
+}
+
+
+
+
 

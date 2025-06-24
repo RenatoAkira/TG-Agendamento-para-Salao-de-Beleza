@@ -2,49 +2,107 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     background-color: #f8f1f5;
     margin: 0;
-  }
-  
-  header {
+    padding: 0;
+}
+
+header {
     background-color: #8b2969;
     color: white;
     text-align: center;
     padding: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-  
-  main {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+main {
     padding: 40px 20px;
-    max-width: 600px;
-    margin: auto;
+    max-width: 700px;
+    margin: 40px auto;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.05);
-  }
-  
-  .form-agendamento {
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+}
+
+.form-agendamento {
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-  
-  label {
+}
+
+label {
     font-weight: bold;
     color: #8b2969;
-  }
-  
-  select, input {
+    margin-bottom: 5px;
+}
+
+.form-control,
+select,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="time"],
+input[type="number"] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
-  }
-  
-  .btn-confirmar-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.horarios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.horario-radio {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f0d7e6;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border: 1px solid #8b2969;
+}
+
+.horario-radio input[type="radio"] {
+    cursor: pointer;
+}
+
+.horario-radio:hover {
+    background-color: #d9a1c5;
+    color: white;
+}
+
+small {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+
+.alerta-sem-horario {
+    color: #b02e2e;
+    font-weight: bold;
+    margin-top: 10px;
+    background-color: #fddede;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #e0b4b4;
+}
+
+.btn-confirmar-container {
+    margin-top: 20px;
     display: flex;
     justify-content: flex-end;
-  }
-  
-  .btn-confirmar {
+}
+
+.btn-confirmar {
     background-color: #8b2969;
     color: white;
     padding: 12px 20px;
@@ -53,9 +111,8 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background 0.3s;
-  }
-  
-  .btn-confirmar:hover {
+}
+
+.btn-confirmar:hover {
     background-color: #6e1f52;
-  }
-  
+}

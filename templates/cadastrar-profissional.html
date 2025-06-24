@@ -12,26 +12,25 @@
   </header>
 
   <main>
-    <form class="form-profissional" enctype="multipart/form-data">
-      <label for="nome">Nome Completo:</label>
-      <input type="text" id="nome" name="nome" required />
+    <form class="form-profissional" method="POST" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
 
-      <label for="telefone">Telefone:</label>
-      <input type="tel" id="telefone" name="telefone" placeholder="(99) 99999-9999" required />
+      <label>{{ form.nome.label }}</label>
+      {{ form.nome(class_='form-control') }}
 
-      <label for="email">E-mail:</label>
-      <input type="email" id="email" name="email" required />
+      <label>{{ form.telefone.label }}</label>
+      {{ form.telefone(class_='form-control') }}
 
-      <label for="senha">Senha:</label>
-      <input type="password" id="senha" name="senha" required />
+      <label>{{ form.email.label }}</label>
+      {{ form.email(class_='form-control') }}
 
-      <label for="confirmarSenha">Confirmar Senha:</label>
-      <input type="password" id="confirmarSenha" name="confirmarSenha" required />
+      <label>{{ form.senha.label }}</label>
+      {{ form.senha(class_='form-control') }}
 
-      <label for="foto">Foto do Profissional:</label>
-      <input type="file" id="foto" name="foto" accept="image/*" />
+      <label>{{ form.confirmar_senha.label }}</label>
+      {{ form.confirmar_senha(class_='form-control') }}
 
-      <button type="submit">Salvar Profissional</button>
+      <button type="submit">{{ form.submit.label }}</button>
     </form>
   </main>
 </body>

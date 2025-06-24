@@ -1,42 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <div class="display-flex">
-        <img src="/static/img/LogoSalao2.png" width="500px">
-    </div>
-    <div class="container">
-        <h2>Cadastro</h2>
-        
-        <!-- Formulário de Cadastro -->
-        <form action="/register" method="POST">  <!-- Envia dados de cadastro para a rota /register -->
-            <div>
-                <label for="nome">Nome</label>
-                <input type="text" name="nome" required>
-            </div>
-            <div>
-                <label for="email">Email</label>
-                <input type="email" name="email" required>
-            </div>
-            <div>
-                <label for="senha">Senha</label>
-                <input type="password" name="senha" required>
-            </div>
-            <div>
-                <label for="confirmar_senha">Confirmar Senha</label>
-                <input type="password" name="confirmar_senha" required>
-            </div>
-            <button type="submit">Cadastrar</button> <!-- Botão de envio do formulário -->
-        </form>
+  <div class="login-wrapper">
+    <div class="login-container">
+      <img src="/static/img/LogoSalao2.png" alt="Logo do Salão" class="logo-login" />
+      <h2>Cadastro de Cliente</h2>
 
-        <div class="register">
-            <a href="/">Login</a> <!-- Link para página de login -->
+      <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+          {{ form.nome.label }}<br>
+          {{ form.nome(size=32, class_='form-control') }}
         </div>
+
+        <div class="form-group">
+          {{ form.telefone.label }}<br>
+          {{ form.telefone(size=32, class_='form-control') }}
+        </div>
+
+        <div class="form-group">
+          {{ form.email.label }}<br>
+          {{ form.email(size=32, class_='form-control') }}
+        </div>
+
+        <div class="form-group">
+          {{ form.senha.label }}<br>
+          {{ form.senha(size=32, class_='form-control') }}
+        </div>
+
+        <div class="form-group">
+          {{ form.confirmar_senha.label }}<br>
+          {{ form.confirmar_senha(size=32, class_='form-control') }}
+        </div>
+
+        <button type="submit">{{ form.submit.label }}</button>
+      </form>
+
+      <div class="register">
+        <a href="{{ url_for('index') }}">Já tenho conta</a>
+      </div>
     </div>
+  </div>
 </body>
 </html>

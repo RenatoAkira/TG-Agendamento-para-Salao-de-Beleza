@@ -3,39 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Agendar Serviço</title>
+  <title>Agendar Serviço para Cliente</title>
   <link rel="stylesheet" href="/static/css/style-profissional-agendar.css" />
 </head>
 <body>
   <header>
-    <h1>Agendar Serviço para Cliente</h1>
+    <h1>Agendar Serviço</h1>
   </header>
 
   <main>
-    <form class="form-agendamento">
-      <label for="cliente">Cliente:</label>
-      <select id="cliente" name="cliente">
-        <option value="">Selecione um cliente</option>
-        <option value="maria">Maria Silva</option>
-        <option value="joao">João Santos</option>
-      </select>
+    <form id="form-agendamento" method="POST">
+      {{ form.hidden_tag() }}
 
-      <label for="servico">Serviço:</label>
-      <select id="servico" name="servico">
-        <option value="">Selecione um serviço</option>
-        <option value="corte">Corte de Cabelo</option>
-        <option value="barba">Barba</option>
-        <option value="manicure">Manicure</option>
-      </select>
+      <!-- Campo oculto de controle -->
+      <input type="hidden" name="carregar_horarios" id="carregar_horarios" value="0">
 
-      <label for="data">Data:</label>
-      <input type="date" id="data" name="data" />
+      <!-- Nome do Cliente -->
+      <label for="{{ form.cliente_nome.id }}">{{ form.cliente_nome.label.text }}</label>
+      {{ form.cliente_nome(class_='form-control') }}
 
-      <label for="horario">Horário:</label>
-      <input type="time" id="horario" name="horario" />
+      <!-- Telefone -->
+      <label for="{{ form.cliente_telefone.id }}">{{ form.cliente_telefone.label.text }}</label>
+      {{ form.cliente_telefone(class_='form-control') }}
 
+      <!-- Email -->
+      <label for="{{ form.cliente_email.id }}">{{ form.cliente_email.label.text }}</label>
+      {{ form.cliente_email(class_='form-control') }}
+
+      <!-- Serviço -->
+      <label for="{{ form.servico_id.id }}">{{ form.servico_id.label.text }}</label>
+      {{ form.servico_id(class_='form-control') }}
+
+      <!-- Data -->
+      <label for="{{ form.data.id }}">{{ form.data.label.text }}</label>
+      {{ form.data(class_='form-control', onchange="document.getElementById('carregar_horarios').value='1'; document.getElementById('form-agendamento').submit();") }}
+      <small>Ao selecionar uma data, a página recarregará para listar os horários disponíveis.</small>
+
+      <!-- Horários (aparece só se houver opções) -->
+      {% if form.horario.choices %}
+        <label for="{{ form.horario.id }}">{{ form.horario.label.text }}</label>
+        <div class="horarios">
+          {% for value, label in form.horario.choices %}
+            <label class="horario-radio">
+              <input type="radio" name="{{ form.horario.name }}" value="{{ value }}"
+                {% if form.horario.data == value %}checked{% endif %}>
+              {{ label }}
+            </label>
+          {% endfor %}
+        </div>
+      {% elif form.data.data %}
+        <div class="alerta-sem-horario">
+          Nenhum horário disponível para a data selecionada.
+        </div>
+      {% endif %}
+
+      <!-- Botão Final -->
       <div class="btn-confirmar-container">
-        <button type="submit" class="btn-confirmar">Confirmar Agendamento</button>
+        {{ form.submit(class_='btn-confirmar') }}
       </div>
     </form>
   </main>

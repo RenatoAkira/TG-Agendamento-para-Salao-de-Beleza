@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Serviço - {{ servico.nome }}</title>
+  <link rel="stylesheet" href="/static/css/perfil-servico.css" />
+</head>
+<body>
+  <header>
+    Serviço: {{ servico.nome }}
+  </header>
+
+  <main>
+    <div class="perfil">
+      <div class="dados-servico">
+        <h2>{{ servico.nome }}</h2>
+        <p><strong>Duração:</strong> {{ servico.duracao }} minutos</p>
+        <p><strong>Preço:</strong> R$ {{ "%.2f"|format(servico.preco) }}</p>
+        <p><strong>Descrição:</strong> {{ servico.descricao }}</p>
+      </div>
+
+      <div class="acoes-servico">
+        <a href="{{ url_for('editar_servico', servico_id=servico.idServico) }}">
+          <button class="btn-editar">Editar</button>
+        </a>
+        <a href="{{ url_for('excluir_servico', servico_id=servico.idServico) }}">
+          <button class="btn-excluir">Excluir</button>
+        </a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -13,7 +13,9 @@
 
   <main>
     <div class="topo">
-      <button class="btn-novo">Cadastrar novo serviço</button>
+      <a href="{{ url_for('cadastrar_servico') }}">
+        <button class="btn-novo">Cadastrar novo serviço</button>
+      </a>
     </div>
 
     <table>
@@ -23,22 +25,25 @@
           <th>Descrição</th>
           <th>Preço</th>
           <th>Duração</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
+        {% for servico in servicos %}
         <tr>
-          <td>Corte Feminino</td>
-          <td>Corte moderno com finalização</td>
-          <td>R$ 100</td>
-          <td>45 min</td>
+          <td>{{ servico.nome }}</td>
+          <td>{{ servico.descricao }}</td>
+          <td>R$ {{ "%.2f"|format(servico.preco) }}</td>
+          <td>{{ servico.duracao }} min</td>
+          <td>
+            <a href="{{ url_for('editar_servico', servico_id=servico.idServico) }}">Editar</a>
+          </td>
         </tr>
+        {% else %}
         <tr>
-          <td>Manicure</td>
-          <td>Limpeza, corte e esmaltação</td>
-          <td>R$ 50</td>
-          <td>30 min</td>
+          <td colspan="5">Nenhum serviço cadastrado.</td>
         </tr>
-        <!-- Outras linhas podem ser adicionadas dinamicamente -->
+        {% endfor %}
       </tbody>
     </table>
   </main>

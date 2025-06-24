@@ -12,33 +12,100 @@
     <div class="logo">
       <img src="/static/img/LogoSalao2.png" width="500px" alt="Logo do Salão" />
     </div>
-    <a class="btn-inicio">
-          <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Logo do Salão">
+    <a class="btn-inicio" href="{{ url_for('index') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Home">
     </a>
   </header>
 
   <main>
     <h1>Selecionar Data e Horário</h1>
     <div class="resumo">
-      <p><strong>Serviço:</strong> Corte</p>
-      <p><strong>Profissional:</strong> Maria Oliveira</p>
+      <p><strong>Serviço:</strong> {{ servico.nome }}</p>
+      <p><strong>Profissional:</strong> {{ profissional.nome }}</p>
     </div>
 
-    <div class="selecao-data">
-      <label for="data">Escolha a data:</label>
-      <input type="date" id="data" />
-    </div>
+    <!-- Formulário de seleção de data -->
+    <form method="GET" action="{{ url_for('selecionar_horario', profissional_id=profissional.idProfissional, servico_id=servico.idServico) }}">
+      <div class="selecao-data">
+        <label for="data">Escolha a data:</label>
+        <input type="date" id="data" name="data" value="{{ data_selecionada or '' }}" required>
+        <button type="submit">Buscar Horários</button>
+      </div>
+    </form>
 
-    <h2>Horários disponíveis</h2>
-    <div class="horarios">
-      <button class="horario">09:00</button>
-      <button class="horario">10:30</button>
-      <button class="horario">13:00</button>
-      <button class="horario">15:00</button>
-      <button class="horario">17:30</button>
-    </div>
+    {% if horarios %}
+      <h2>Horários disponíveis</h2>
+      <div class="horarios">
+        {% for horario in horarios %}
+          <button type="button" class="horario">{{ horario }}</button>
+        {% endfor %}
+      </div>
+    {% elif data_selecionada %}
+      <p>Nenhum horário disponível para esta data.</p>
+    {% endif %}
   </main>
 
-  <button class="btn-confirmar">Confirmar Agendamento</button>
+  <div class="botoes-agendamento">
+    <button class="btn-confirmar">Confirmar Agendamento</button>
+    <button class="btn-cancelar" onclick="location.href='{{ url_for('listar_servicos') }}'">Cancelar</button>
+  </div>
+
+  <!-- Modal de confirmação -->
+  <div id="modal-agendamento" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <h2>Confirmação de Agendamento</h2>
+      <form method="POST" action="{{ url_for('confirmar_agendamento') }}">
+        <input type="hidden" name="servico_id" value="{{ servico.idServico }}">
+        <input type="hidden" name="profissional_id" value="{{ profissional.idProfissional }}">
+        <input type="hidden" name="data" id="data_hidden_modal" value="">
+        <input type="hidden" name="horario" id="horario_hidden_modal" value="">
+
+        <label>Nome:</label>
+        <input type="text" name="cliente_nome" required>
+
+        <label>Telefone:</label>
+        <input type="text" name="cliente_telefone" required>
+
+        <label>Email:</label>
+        <input type="email" name="cliente_email">
+
+        <div class="modal-buttons">
+          <button type="submit" class="btn-confirmar">Confirmar</button>
+          <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const horarios = document.querySelectorAll('.horario');
+    let horarioSelecionado = '';
+
+    horarios.forEach(button => {
+      button.addEventListener('click', () => {
+        horarioSelecionado = button.textContent.trim();
+        horarios.forEach(btn => btn.classList.remove('selecionado'));
+        button.classList.add('selecionado');
+      });
+    });
+
+    document.querySelector('.btn-confirmar').addEventListener('click', function() {
+      const dataSelecionada = document.getElementById('data').value;
+
+      if (!dataSelecionada || !horarioSelecionado) {
+        alert('Por favor, selecione a data e o horário antes de confirmar.');
+        return;
+      }
+
+      document.getElementById('data_hidden_modal').value = dataSelecionada;
+      document.getElementById('horario_hidden_modal').value = horarioSelecionado;
+
+      document.getElementById('modal-agendamento').style.display = 'flex';
+    });
+
+    function fecharModal() {
+      document.getElementById('modal-agendamento').style.display = 'none';
+    }
+  </script>
 </body>
 </html>

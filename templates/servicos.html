@@ -5,65 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Serviços</title>
   <link rel="stylesheet" href="/static/css/style-servicos.css" />
-  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
-
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="/static/img/LogoSalao2.png" width="500px" alt="Logo do Salão">
-        </div>
-        <a class="btn-inicio">
-          <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Logo do Salão">
-        </a>
-    </header>
+  <header>
+    <div class="logo">
+      <img src="/static/img/LogoSalao2.png" width="500px" alt="Logo do Salão">
+    </div>
+  </header>
 
   <main>
     <h1>Serviços</h1>
 
     <div class="search-container">
-      <input type="text" placeholder="Pesquisar serviços..." />
-      <button>🔍</button>
+      <form method="GET">
+        <input type="text" name="search" placeholder="Pesquisar serviços..." value="{{ search }}">
+        <button type="submit">🔍</button>
+      </form>
     </div>
-    
+
     <div class="lista-servicos">
-
-      <div class="servico">
-        <div class="info-servico">
-          <h3>Corte Feminino</h3>
-          <p>Transforme seu visual com um corte moderno e personalizado.</p>
-          <div class="detalhes">
-            <span class="preco">R$ 100</span>
-            <span class="duracao">45 minutos</span>
+      {% if servicos %}
+        {% for servico in servicos %}
+          <div class="servico">
+            <div class="info-servico">
+              <h3>{{ servico.nome }}</h3>
+              <p>{{ servico.descricao }}</p>
+              <div class="detalhes">
+                <span class="preco">R$ {{ servico.preco }}</span>
+                <span class="duracao">{{ servico.duracao }} minutos</span>
+              </div>
+            </div>
+            <a href="{{ url_for('escolher_profissional', servico_id=servico.idServico) }}">
+              <button class="btn-agendar">Agendar</button>
+            </a>
           </div>
-        </div>
-        <button class="btn-agendar">Agendar</button>
-      </div>
-
-      <div class="servico">
-        <div class="info-servico">
-          <h3>Coloração</h3>
-          <p>Mude a cor dos seus cabelos com produtos de alta qualidade.</p>
-          <div class="detalhes">
-            <span class="preco">R$ 150</span>
-            <span class="duracao">1h 30min</span>
-          </div>
-        </div>
-        <button class="btn-agendar">Agendar</button>
-      </div>
-
-      <div class="servico">
-        <div class="info-servico">
-          <h3>Escova Modeladora</h3>
-          <p>Alisamento e modelagem com acabamento profissional.</p>
-          <div class="detalhes">
-            <span class="preco">R$ 80</span>
-            <span class="duracao">1 hora</span>
-          </div>
-        </div>
-        <button class="btn-agendar">Agendar</button>
-      </div>
-
+        {% endfor %}
+      {% else %}
+        <p>Nenhum serviço encontrado.</p>
+      {% endif %}
     </div>
   </main>
 </body>
