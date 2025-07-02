@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Serviço - {{ servico.nome }}</title>
   <link rel="stylesheet" href="/static/css/perfil-servico.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
 </head>
 <body>
   <header>
     Serviço: {{ servico.nome }}
+    <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>

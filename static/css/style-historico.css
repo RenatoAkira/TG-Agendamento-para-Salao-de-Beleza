@@ -90,3 +90,30 @@ html {
     background-color: #cc4b64;
   }
   
+  /* Flash messages */
+.flash-messages {
+  margin: 20px auto;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.flash {
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+}
+
+.flash.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.flash.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}

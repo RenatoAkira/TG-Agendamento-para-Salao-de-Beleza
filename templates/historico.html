@@ -18,6 +18,16 @@
   </header>
 
   <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <h1>Histórico de Agendamentos</h1>
 
     <div class="agendamentos">
@@ -30,7 +40,6 @@
             <p><strong>Horário:</strong> {{ agendamento.horaInicio.strftime('%H:%M') }} às {{ agendamento.horaFim.strftime('%H:%M') }}</p>
             <p class="status {{ agendamento.status|lower }}">{{ agendamento.status.capitalize() }}</p>
 
-            <!-- Exemplo: botão de cancelar (opcional) -->
             {% if agendamento.status.lower() == 'pendente' %}
               <form method="POST" action="{{ url_for('cancelar_agendamento', agendamento_id=agendamento.idAgendamento) }}">
                 <button type="submit" class="cancelar">Cancelar</button>

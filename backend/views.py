@@ -655,14 +655,13 @@ def profissional_agendar():
 @app.route('/cancelar-agendamento/<int:agendamento_id>', methods=['POST'])
 @login_required
 def cancelar_agendamento(agendamento_id):
-    cliente_id = session.get('cliente_id')
-    if not cliente_id:
+    if not isinstance(current_user._get_current_object(), Cliente):
         flash('Acesso restrito a clientes.', 'error')
         return redirect(url_for('login'))
 
+    cliente_id = current_user.idCliente
     agendamento = Agendamento.query.get_or_404(agendamento_id)
 
-    # Verifica se o agendamento pertence ao cliente e está pendente
     if agendamento.idCliente != cliente_id:
         flash('Você não tem permissão para cancelar este agendamento.', 'error')
         return redirect(url_for('historico'))
@@ -671,7 +670,6 @@ def cancelar_agendamento(agendamento_id):
         flash('Somente agendamentos pendentes podem ser cancelados.', 'error')
         return redirect(url_for('historico'))
 
-    # Atualiza o status para cancelado
     agendamento.status = 'cancelado'
     db.session.commit()
 
