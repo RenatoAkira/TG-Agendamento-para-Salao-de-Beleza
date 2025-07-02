@@ -47,7 +47,7 @@ header {
 }
 
 main {
-  padding-top: 180px; 
+  padding-top: 90px; 
   max-width: 600px;
   margin: 0 auto;
   text-align: center;
@@ -86,11 +86,37 @@ h1 {
   transform: scale(1.05);
 }
 
+.perfil-container {
+  position: absolute;
+  top: 50%;
+  right: 100px;
+  transform: translateY(-50%);
+  z-index: 101;
+}
 
+.menu-perfil {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  min-width: 160px;
+  font-size: 16px;
+  overflow: hidden;
+  z-index: 102;
+}
 
+.menu-perfil a {
+  display: block;
+  padding: 12px 18px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.2s;
+}
 
-
-
-
-
-
+.menu-perfil a:hover {
+  background-color: #f2f2f2;
+}

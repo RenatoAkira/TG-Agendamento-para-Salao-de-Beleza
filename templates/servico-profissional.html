@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perfil do Profissional</title>
-  <link rel="stylesheet" href="/static/css/style-servico-profissional.css">
+  <link rel="stylesheet" href="/static/css/style-servico-profissional.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
 </head>
 <body>
   <header>
     <h1>Perfil do Profissional</h1>
+    <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <div class="perfil">
-      <img src="{{ url_for('static', filename='img/default-user.png') }}" alt="Foto do Profissional" class="foto-perfil">
+      <img src="{{ url_for('static', filename='img/default-user.png') }}" alt="Foto do Profissional" class="foto-perfil" />
       <div class="dados-profissional">
         <h2>{{ profissional.nome }}</h2>
         <p><strong>Telefone:</strong> {{ profissional.telefone }}</p>
@@ -21,38 +35,54 @@
 
         <div class="acoes-profissional">
           <a href="{{ url_for('editar_profissional', profissional_id=profissional.idProfissional) }}">
-            <button class="btn-editar">Editar</button>
+            <button type="button" class="btn-editar">Editar</button>
           </a>
-          <a href="{{ url_for('excluir_profissional', profissional_id=profissional.idProfissional) }}">
-            <button class="btn-excluir">Excluir</button>
-          </a>
+          <button class="btn-excluir" onclick="confirmarExclusao()">Excluir</button>
         </div>
       </div>
     </div>
 
+    <!-- Formulário oculto para exclusão -->
+    <form id="form-excluir" method="POST" action="{{ url_for('excluir_profissional', profissional_id=profissional.idProfissional) }}" style="display: none;"></form>
+
+    <!-- Formulário para atribuir serviço -->
     <form method="POST" action="{{ url_for('atribuir_servico', profissional_id=profissional.idProfissional) }}">
       {{ form.hidden_tag() }}
-      <label>{{ form.servico_id.label }}</label>
-      {{ form.servico_id(class_='form-control') }}
-
-      <button type="submit">{{ form.submit.label }}</button>
+      <label for="servico_id">{{ form.servico_id.label }}</label>
+      {{ form.servico_id(class_='form-control', id='servico_id') }}
+      {{ form.submit(class_='btn-atribuir-servico') }}
     </form>
 
+    <!-- Formulário para montar agenda -->
     <section class="agenda">
       <h3>Montar Agenda do Profissional</h3>
-      <form method="POST" action="{{ url_for('adicionar_disponibilidade', profissional_id=profissional.idProfissional) }}">
+      <form id="form-agenda" method="POST" action="{{ url_for('adicionar_disponibilidade', profissional_id=profissional.idProfissional) }}">
         {{ agenda_form.hidden_tag() }}
+
         <div>
-          <label>{{ agenda_form.data.label }}</label>
-          {{ agenda_form.data(class_='form-control') }}
+          <label for="data">{{ agenda_form.data.label }}</label>
+          {{ agenda_form.data(class_='form-control', id='data') }}
         </div>
         <div>
-          <label>{{ agenda_form.horario.label }}</label>
-          {{ agenda_form.horario(class_='form-control') }}
+          <label for="horario_inicio">{{ agenda_form.horario_inicio.label }}</label>
+          {{ agenda_form.horario_inicio(class_='form-control', id='horario_inicio') }}
         </div>
-        <button type="submit">{{ agenda_form.submit.label }}</button>
+        <div>
+          <label for="horario_fim">{{ agenda_form.horario_fim.label }}</label>
+          {{ agenda_form.horario_fim(class_='form-control', id='horario_fim') }}
+        </div>
+
+        {{ agenda_form.submit(class_='btn-cadastrar-agenda') }}
       </form>
     </section>
   </main>
+
+  <script>
+    function confirmarExclusao() {
+      if (confirm('Tem certeza que deseja excluir este profissional?')) {
+        document.getElementById('form-excluir').submit();
+      }
+    }
+  </script>
 </body>
 </html>

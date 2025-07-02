@@ -47,4 +47,17 @@ main {
   background-color: #a33b85;
 }
 
+.logout-icon {
+  position: absolute;
+  top: 24px;
+  right: 30px;
+  font-size: 28px;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logout-icon:hover {
+  color: #fdd;
+}
   

@@ -5,13 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profissionais - Admin</title>
   <link rel="stylesheet" href="/static/css/style-profissionais.css">
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
+  <style>
+    tr[data-link] {
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    tr[data-link]:hover {
+      background-color: #f5e5f0;
+    }
+
+    .flash-messages {
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    .flash-messages .alert {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .alert.success {
+      background-color: #ccffe0;
+      border: 1px solid #28a745;
+      color: #155724;
+    }
+
+    .alert.error {
+      background-color: #ffcccc;
+      border: 1px solid #dc3545;
+      color: #721c24;
+    }
+
+    .alert.warning {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>Lista de Profissionais</h1>
+    <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <div class="topo">
       <a href="{{ url_for('cadastrar_profissional') }}">
         <button class="btn-novo">Cadastrar Novo Profissional</button>
@@ -24,34 +78,39 @@
           <th>Nome</th>
           <th>Especialidades</th>
           <th>Telefone</th>
-          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         {% if profissionais %}
           {% for profissional in profissionais %}
-            <tr>
+            <tr data-link="{{ url_for('servico_profissional', profissional_id=profissional.idProfissional) }}">
               <td>{{ profissional.nome }}</td>
               <td>
-                {% for servico in profissional.servicos %}
-                  {{ servico.nome }}{% if not loop.last %}, {% endif %}
+                {% for ps in profissional.servicos %}
+                  {{ ps.servico.nome }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
               </td>
               <td>{{ profissional.telefone }}</td>
-              <td>
-                <a href="{{ url_for('servico_profissional', profissional_id=profissional.idProfissional) }}">
-                  <button>Ver Perfil</button>
-                </a>
-              </td>
             </tr>
           {% endfor %}
         {% else %}
           <tr>
-            <td colspan="4">Nenhum profissional cadastrado.</td>
+            <td colspan="3">Nenhum profissional cadastrado.</td>
           </tr>
         {% endif %}
       </tbody>
     </table>
   </main>
+
+  <script>
+    document.querySelectorAll('tr[data-link]').forEach(tr => {
+      tr.addEventListener('click', () => {
+        const link = tr.getAttribute('data-link');
+        if (link) {
+          window.location.href = link;
+        }
+      });
+    });
+  </script>
 </body>
 </html>

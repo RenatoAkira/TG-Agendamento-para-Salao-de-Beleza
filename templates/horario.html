@@ -6,13 +6,14 @@
   <title>Selecionar Horário</title>
   <link rel="stylesheet" href="/static/css/style-horario.css" />
   <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
   <header>
     <div class="logo">
       <img src="/static/img/LogoSalao2.png" width="500px" alt="Logo do Salão" />
     </div>
-    <a class="btn-inicio" href="{{ url_for('index') }}">
+    <a class="btn-inicio" href="{{ url_for('cliente_inicio') }}">
       <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Home">
     </a>
   </header>
@@ -24,25 +25,23 @@
       <p><strong>Profissional:</strong> {{ profissional.nome }}</p>
     </div>
 
-    <!-- Formulário de seleção de data -->
-    <form method="GET" action="{{ url_for('selecionar_horario', profissional_id=profissional.idProfissional, servico_id=servico.idServico) }}">
-      <div class="selecao-data">
-        <label for="data">Escolha a data:</label>
-        <input type="date" id="data" name="data" value="{{ data_selecionada or '' }}" required>
-        <button type="submit">Buscar Horários</button>
-      </div>
-    </form>
+    <div class="selecao-data">
+      <label for="data">Escolha a data:</label>
+      <input type="date" id="data" name="data" value="{{ data_selecionada or '' }}" required>
+    </div>
 
-    {% if horarios %}
-      <h2>Horários disponíveis</h2>
-      <div class="horarios">
-        {% for horario in horarios %}
-          <button type="button" class="horario">{{ horario }}</button>
-        {% endfor %}
-      </div>
-    {% elif data_selecionada %}
-      <p>Nenhum horário disponível para esta data.</p>
-    {% endif %}
+    <div id="horarios-container">
+      {% if horarios %}
+        <h2>Horários disponíveis</h2>
+        <div class="horarios">
+          {% for horario in horarios %}
+            <button type="button" class="horario">{{ horario }}</button>
+          {% endfor %}
+        </div>
+      {% elif data_selecionada %}
+        <p>Nenhum horário disponível para esta data.</p>
+      {% endif %}
+    </div>
   </main>
 
   <div class="botoes-agendamento">
@@ -54,20 +53,21 @@
   <div id="modal-agendamento" class="modal-overlay" style="display:none;">
     <div class="modal-content">
       <h2>Confirmação de Agendamento</h2>
+
+      <p><strong>Nome:</strong> {{ current_user.nome }}</p>
+      <p><strong>Telefone:</strong> {{ current_user.telefone }}</p>
+      <p><strong>Email:</strong> {{ current_user.email }}</p>
+      <p><strong>Data:</strong> <span id="resumo-data"></span></p>
+      <p><strong>Horário:</strong> <span id="resumo-horario"></span></p>
+
       <form method="POST" action="{{ url_for('confirmar_agendamento') }}">
         <input type="hidden" name="servico_id" value="{{ servico.idServico }}">
         <input type="hidden" name="profissional_id" value="{{ profissional.idProfissional }}">
-        <input type="hidden" name="data" id="data_hidden_modal" value="">
-        <input type="hidden" name="horario" id="horario_hidden_modal" value="">
-
-        <label>Nome:</label>
-        <input type="text" name="cliente_nome" required>
-
-        <label>Telefone:</label>
-        <input type="text" name="cliente_telefone" required>
-
-        <label>Email:</label>
-        <input type="email" name="cliente_email">
+        <input type="hidden" name="data" id="data_hidden_modal">
+        <input type="hidden" name="horario" id="horario_hidden_modal">
+        <input type="hidden" name="cliente_nome" value="{{ current_user.nome }}">
+        <input type="hidden" name="cliente_telefone" value="{{ current_user.telefone }}">
+        <input type="hidden" name="cliente_email" value="{{ current_user.email }}">
 
         <div class="modal-buttons">
           <button type="submit" class="btn-confirmar">Confirmar</button>
@@ -78,9 +78,22 @@
   </div>
 
   <script>
-    const horarios = document.querySelectorAll('.horario');
     let horarioSelecionado = '';
 
+    function carregarHorarios(data) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('data', data);
+      window.location.href = url;
+    }
+
+    document.getElementById('data').addEventListener('change', function () {
+      const dataSelecionada = this.value;
+      if (dataSelecionada) {
+        carregarHorarios(dataSelecionada);
+      }
+    });
+
+    const horarios = document.querySelectorAll('.horario');
     horarios.forEach(button => {
       button.addEventListener('click', () => {
         horarioSelecionado = button.textContent.trim();
@@ -89,7 +102,7 @@
       });
     });
 
-    document.querySelector('.btn-confirmar').addEventListener('click', function() {
+    document.querySelector('.btn-confirmar').addEventListener('click', function () {
       const dataSelecionada = document.getElementById('data').value;
 
       if (!dataSelecionada || !horarioSelecionado) {
@@ -99,6 +112,8 @@
 
       document.getElementById('data_hidden_modal').value = dataSelecionada;
       document.getElementById('horario_hidden_modal').value = horarioSelecionado;
+      document.getElementById('resumo-data').textContent = dataSelecionada;
+      document.getElementById('resumo-horario').textContent = horarioSelecionado;
 
       document.getElementById('modal-agendamento').style.display = 'flex';
     });

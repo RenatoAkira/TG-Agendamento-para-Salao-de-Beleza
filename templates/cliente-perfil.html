@@ -5,23 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Perfil do Cliente</title>
   <link rel="stylesheet" href="/static/css/style-perfil-cliente.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .flash-messages {
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    .flash-messages .alert {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .alert.success {
+      background-color: #ccffe0;
+      border: 1px solid #28a745;
+      color: #155724;
+    }
+
+    .alert.error {
+      background-color: #ffcccc;
+      border: 1px solid #dc3545;
+      color: #721c24;
+    }
+
+    .alert.warning {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+    }
+  </style>
 </head>
 <body>
   <header>
     <div class="logo">
       <img src="/static/img/LogoSalao2.png" width="500px" alt="Logo do Salão" />
     </div>
+    <a class="btn-inicio" href="{{ url_for('cliente_inicio') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
-    <div class="perfil-cliente">
-      <div class="topo-perfil">
-        <img src="/static/img/default-user.png" alt="Foto do Cliente" class="foto-perfil" />
-        <div class="dados-cliente">
-          <h2>{{ cliente.nome }}</h2>
-          <p><strong>Telefone:</strong> {{ cliente.telefone }}</p>
-          <p><strong>Email:</strong> {{ cliente.email }}</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
         </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="perfil-cliente">
+      <div class="dados-cliente">
+        <h2>{{ cliente.nome }}</h2>
+        <p><strong>Telefone:</strong> {{ cliente.telefone }}</p>
+        <p><strong>E-mail:</strong> {{ cliente.email }}</p>
       </div>
 
       <form class="form-perfil" method="POST">
@@ -35,6 +78,12 @@
 
         <label>{{ form.email.label }}</label>
         {{ form.email(class_='form-control', value=cliente.email) }}
+
+        <label>{{ form.nova_senha.label }}</label>
+        {{ form.nova_senha(class_='form-control') }}
+
+        <label>{{ form.confirmar_senha.label }}</label>
+        {{ form.confirmar_senha(class_='form-control') }}
 
         <button type="submit">{{ form.submit.label }}</button>
       </form>

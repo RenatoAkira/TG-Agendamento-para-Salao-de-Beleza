@@ -5,25 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Perfil do Cliente</title>
   <link rel="stylesheet" href="/static/css/style-perfil-cliente.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
 </head>
 <body>
   <header>
     <h1>Perfil do Cliente</h1>
+    <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
+            <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
-    <div class="perfil">
-      <div class="dados-cliente">
-        <h2>Nome do Cliente</h2>
-        <p><strong>Telefone:</strong> (11) 99999-9999</p>
-        <p><strong>E-mail:</strong> exemplo@email.com</p>
+    <div class="perfil-cliente">
 
-        <div class="acoes-cliente">
-          <button class="btn-editar">Editar</button>
-          <button class="btn-excluir">Excluir</button>
+      <!-- Visualização (modo leitura) -->
+      <div class="dados-cliente" id="dadosLeitura">
+        <h2 id="nomeView">{{ cliente.nome }}</h2>
+        <p><strong>Telefone:</strong> <span id="telefoneView">{{ cliente.telefone }}</span></p>
+        <p><strong>E-mail:</strong> <span id="emailView">{{ cliente.email }}</span></p>
+      </div>
+
+      <!-- Formulário de edição -->
+      <form method="POST" action="{{ url_for('admin_perfil_cliente', cliente_id=cliente.idCliente) }}" class="form-editar" id="formEditar">
+        {{ form.hidden_tag() }}
+
+        <label for="nome">Nome:</label>
+        {{ form.nome(class_="form-control", id="nomeInput") }}
+
+        <label for="telefone">Telefone:</label>
+        {{ form.telefone(class_="form-control", id="telefoneInput") }}
+
+        <label for="email">E-mail:</label>
+        {{ form.email(class_="form-control", id="emailInput") }}
+
+        <div class="botoes-acoes">
+          <button type="submit" class="btn-editar">Salvar</button>
         </div>
+      </form>
+
+      <!-- Botões -->
+      <div class="botoes-acoes" id="botoesIniciais">
+        <button class="btn-editar" onclick="habilitarEdicao()">Editar</button>
+
+        <form method="POST" action="{{ url_for('admin_excluir_cliente', cliente_id=cliente.idCliente) }}">
+          <button type="submit" class="btn-excluir" onclick="return confirm('Tem certeza que deseja excluir este cliente? Esta ação é irreversível.')">Excluir</button>
+        </form>
       </div>
     </div>
   </main>
+
+  <script>
+    function habilitarEdicao() {
+      document.getElementById('dadosLeitura').style.display = 'none';
+      document.getElementById('botoesIniciais').style.display = 'none';
+      document.getElementById('formEditar').style.display = 'flex';
+    }
+  </script>
 </body>
 </html>

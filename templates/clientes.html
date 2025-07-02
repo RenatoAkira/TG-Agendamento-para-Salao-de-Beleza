@@ -5,15 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Clientes - Admin</title>
   <link rel="stylesheet" href="/static/css/style-clientes.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
+  <style>
+    tbody tr {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background-color: #f9e9f2;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>Clientes</h1>
+    <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
+            <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
     <div class="topo">
-
+      <!-- Você pode adicionar botão "voltar" ou busca aqui futuramente -->
     </div>
 
     <table>
@@ -25,16 +39,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Ana Oliveira</td>
-          <td>ana@gmail.com</td>
-          <td>(11) 99999-1234</td>
-        </tr>
-        <tr>
-          <td>Bruno Silva</td>
-          <td>bruno@hotmail.com</td>
-          <td>(11) 98888-5678</td>
-        </tr>
+        {% for cliente in clientes %}
+          <tr onclick="window.location='{{ url_for('admin_perfil_cliente', cliente_id=cliente.idCliente) }}'">
+            <td>{{ cliente.nome }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.telefone }}</td>
+          </tr>
+        {% endfor %}
       </tbody>
     </table>
   </main>

@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Início - Profissional</title>
   <link rel="stylesheet" href="/static/css/style-inicio-profissional.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
   <header>
     <h1>Bem-vindo, {{ current_user.nome }}</h1>
+    <a href="{{ url_for('logout') }}" class="logout-icon" title="Sair" onclick="return confirmarLogout();">
+      <i class="fas fa-sign-out-alt"></i>
+    </a>
   </header>
 
   <main>
@@ -22,5 +26,11 @@
       </a>
     </div>
   </main>
+
+  <script>
+    function confirmarLogout() {
+      return confirm("Tem certeza que deseja sair do sistema?");
+    }
+  </script>
 </body>
 </html>

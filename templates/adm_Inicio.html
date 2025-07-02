@@ -1,34 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Início - Administrador</title>
-  <link rel="stylesheet" href="/static/css/style-adm-inicio.css">
+  <link rel="stylesheet" href="/static/css/style-adm-inicio.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
   <header>
     <h1>Bem-vindo, {{ current_user.nome }}</h1>
+    <a href="{{ url_for('logout') }}" class="logout-icon" title="Sair" onclick="return confirmarLogout();">
+      <i class="fas fa-sign-out-alt"></i>
+    </a>
   </header>
 
   <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <div class="menu-admin">
-      <a href="{{ url_for('admin_servicos') }}">
-        <button>Gerenciar Serviços</button>
-      </a>
-
       <a href="{{ url_for('admin_profissionais') }}">
-        <button>Gerenciar Profissionais</button>
+        <button>Profissionais</button>
       </a>
 
-      <a href="{{ url_for('cadastrar_servico') }}">
-        <button>Cadastrar Novo Serviço</button>
+      <a href="{{ url_for('admin_clientes') }}">
+        <button>Clientes</button>
       </a>
 
-      <a href="{{ url_for('cadastrar_profissional') }}">
-        <button>Cadastrar Novo Profissional</button>
+      <a href="{{ url_for('admin_servicos') }}">
+        <button>Serviços</button>
       </a>
     </div>
   </main>
+
+  <script>
+    function confirmarLogout() {
+      return confirm("Tem certeza que deseja sair do sistema?");
+    }
+  </script>
 </body>
 </html>

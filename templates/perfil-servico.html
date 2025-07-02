@@ -24,11 +24,21 @@
         <a href="{{ url_for('editar_servico', servico_id=servico.idServico) }}">
           <button class="btn-editar">Editar</button>
         </a>
-        <a href="{{ url_for('excluir_servico', servico_id=servico.idServico) }}">
-          <button class="btn-excluir">Excluir</button>
-        </a>
+
+        <form id="form-excluir" method="POST" action="{{ url_for('excluir_servico', servico_id=servico.idServico) }}" style="display: none;"></form>
+
+        <button class="btn-excluir" onclick="confirmarExclusao()">Excluir</button>
       </div>
     </div>
   </main>
+
+  <script>
+    function confirmarExclusao() {
+      const confirmacao = confirm("Tem certeza que deseja excluir este serviço?");
+      if (confirmacao) {
+        document.getElementById("form-excluir").submit();
+      }
+    }
+  </script>
 </body>
 </html>

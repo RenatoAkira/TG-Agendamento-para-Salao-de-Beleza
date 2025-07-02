@@ -6,32 +6,85 @@
   <title>Página Inicial</title>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
   <link rel="stylesheet" href="/static/css/style_inicio.css" />
+  <style>
+    .flash-messages {
+      margin: 20px auto;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .flash-messages .alert {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .alert.success {
+      background-color: #ccffe0;
+      border: 1px solid #28a745;
+      color: #155724;
+    }
+
+    .alert.error {
+      background-color: #ffcccc;
+      border: 1px solid #dc3545;
+      color: #721c24;
+    }
+
+    .alert.warning {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <a href="/perfil-cliente" class="perfil-usuario" title="Ver perfil">
-      <i class="fas fa-user-circle"></i>
-    </a>
+    <div class="perfil-container">
+      <i class="fas fa-user-circle perfil-usuario" onclick="toggleMenuPerfil()"></i>
+      <div class="menu-perfil" id="menuPerfil">
+        <a href="{{ url_for('perfil_cliente') }}">Ver Perfil</a>
+        <a href="{{ url_for('logout') }}">Sair</a>
+      </div>
+    </div>
+
     <div class="logo">
       <img src="/static/img/LogoSalao2.png" alt="Logo do Salão" />
     </div>
   </header>
 
   <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <h1>Bem-vindo ao Salão de Beleza</h1>
     <div class="menu-opcoes">
       <a href="/servicos"><button class="btn-menu">Agendar Serviço</button></a>
       <a href="/historico"><button class="btn-menu">Histórico de Agendamentos</button></a>
     </div>
   </main>
+
+  <script>
+    function toggleMenuPerfil() {
+      const menu = document.getElementById("menuPerfil");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    document.addEventListener("click", function (event) {
+      const menu = document.getElementById("menuPerfil");
+      const button = document.querySelector(".perfil-usuario");
+      if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-

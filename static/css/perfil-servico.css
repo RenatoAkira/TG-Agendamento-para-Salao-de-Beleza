@@ -88,3 +88,8 @@ main {
 .btn-excluir:hover {
   background-color: #801f1f;
 }
+
+.btn-editar:active,
+.btn-excluir:active {
+  transform: scale(0.96);
+}

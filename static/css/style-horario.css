@@ -315,10 +315,6 @@ button {
   background-color: #ccc;
 }
 
-
-
-
-
-
-
-
+.modal-content p {
+  color: #000; /* Torna o texto preto */
+}

@@ -5,10 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{{ titulo_pagina }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style-cadastrar-servico.css') }}">
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
 </head>
 <body>
   <header>
     <h1>{{ titulo_pagina }}</h1>
+    <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
@@ -27,7 +31,7 @@
       <label>{{ form.duracao.label }}</label>
       {{ form.duracao(class_='form-control') }}
 
-      <button type="submit">{{ form.submit.label }}</button>
+      <button type="submit">{{ texto_botao }}</button>
     </form>
   </main>
 </body>

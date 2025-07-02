@@ -116,3 +116,20 @@ small {
 .btn-confirmar:hover {
     background-color: #6e1f52;
 }
+
+/* Estilo para exibir erros do formulário */
+ul.form-errors {
+    list-style: none;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    background-color: #fddede;
+    border: 1px solid #e0b4b4;
+    border-radius: 6px;
+    color: #b02e2e;
+    font-weight: bold;
+}
+
+ul.form-errors li {
+    margin-bottom: 6px;
+    font-size: 15px;
+}

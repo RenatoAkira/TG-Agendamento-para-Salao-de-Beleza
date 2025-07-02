@@ -5,13 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Serviços - Admin</title>
   <link rel="stylesheet" href="/static/css/style-adm-servicos.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
+  <style>
+    tr.link-linha {
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    tr.link-linha:hover {
+      background-color: #f3d8e6;
+    }
+
+    .flash-messages {
+      margin: 20px auto;
+      max-width: 800px;
+    }
+
+    .flash-messages .alert {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .alert.success {
+      background-color: #ccffe0;
+      border: 1px solid #28a745;
+      color: #155724;
+    }
+
+    .alert.error {
+      background-color: #ffcccc;
+      border: 1px solid #dc3545;
+      color: #721c24;
+    }
+
+    .alert.warning {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+    }
+  </style>
 </head>
 <body>
   <header>
     <h1>Serviços</h1>
+    <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <div class="topo">
       <a href="{{ url_for('cadastrar_servico') }}">
         <button class="btn-novo">Cadastrar novo serviço</button>
@@ -25,23 +79,19 @@
           <th>Descrição</th>
           <th>Preço</th>
           <th>Duração</th>
-          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         {% for servico in servicos %}
-        <tr>
+        <tr class="link-linha" onclick="window.location.href='{{ url_for('perfil_servico', servico_id=servico.idServico) }}'">
           <td>{{ servico.nome }}</td>
           <td>{{ servico.descricao }}</td>
           <td>R$ {{ "%.2f"|format(servico.preco) }}</td>
           <td>{{ servico.duracao }} min</td>
-          <td>
-            <a href="{{ url_for('editar_servico', servico_id=servico.idServico) }}">Editar</a>
-          </td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="5">Nenhum serviço cadastrado.</td>
+          <td colspan="4">Nenhum serviço cadastrado.</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -40,11 +40,11 @@
           {{ form.confirmar_senha(size=32, class_='form-control') }}
         </div>
 
-        <button type="submit">{{ form.submit.label }}</button>
+        {{ form.submit(class_="btn-login") }}
       </form>
 
       <div class="register">
-        <a href="{{ url_for('index') }}">Já tenho conta</a>
+        <a href="{{ url_for('login') }}">Já tenho conta</a>
       </div>
     </div>
   </div>

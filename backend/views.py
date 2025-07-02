@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for, flash, session, j
 from backend import db, bcrypt, login_manager
 from flask import current_app as app
 from backend.models import Cliente, Profissional, Administrador, Servico, ProfissionalServico, Agenda, Agendamento
-from backend.forms import ClienteRegisterForm, LoginForm, CadastroProfissionalForm, CadastroServicoForm, AgendamentoForm, AgendaForm, AtribuirServicoForm
+from backend.forms import ClienteAdminForm, ClientePerfilForm, ClienteRegisterForm, LoginForm, CadastroProfissionalForm, CadastroServicoForm, AgendamentoForm, AgendaForm, AtribuirServicoForm
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -16,8 +16,12 @@ def load_user(user_id):
     elif user_id.startswith('prof-'):
         prof_id = user_id.split('-')[1]
         return Profissional.query.get(prof_id)
-    else:
-        return None
+    elif user_id.startswith('cliente-'):
+        cliente_id = user_id.split('-')[1]
+        return Cliente.query.get(cliente_id)
+    return None
+
+    
 @app.route("/")
 def index():
     return render_template("apresentacao.html")
@@ -29,26 +33,34 @@ def login():
         email = form.email.data
         senha = form.senha.data
 
+        print(f"Tentando login com email: {email}")
+
         user = Administrador.query.filter_by(email=email).first()
         if user and user.check_password(senha):
+            print("Login como Administrador")
             login_user(user)
             return redirect(url_for('admin_inicio'))
 
         user = Profissional.query.filter_by(email=email).first()
         if user and user.check_password(senha):
+            print("Login como Profissional")
             login_user(user)
             return redirect(url_for('profissional_inicio'))
 
         cliente = Cliente.query.filter_by(email=email).first()
         if cliente and cliente.check_password(senha):
-            session['cliente_id'] = cliente.idCliente
-            flash('Login realizado com sucesso!', 'success')
+            print("Login como Cliente")
+            login_user(cliente)
+            # flash('Login realizado com sucesso!', 'success')
             return redirect(url_for('cliente_inicio'))
 
+        print("Login falhou para todos os tipos.")
         flash('Credenciais incorretas.', 'error')
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
     return render_template('login.html', form=form)
+
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -77,11 +89,11 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
 @app.route('/cliente/inicio')
 @login_required
 def cliente_inicio():
-    # Só permite acesso se for cliente (não administrador nem profissional)
-    if 'cliente_id' not in session:
+    if not isinstance(current_user._get_current_object(), Cliente):
         flash('Acesso restrito a clientes.', 'error')
         return redirect(url_for('login'))
 
@@ -199,19 +211,13 @@ def confirmar_agendamento():
 @app.route('/historico')
 @login_required
 def historico():
-    # Só permite acesso se for cliente (e não admin ou profissional)
-    cliente_id = session.get('cliente_id')
-    if not cliente_id:
+    if not isinstance(current_user._get_current_object(), Cliente):
         flash('Acesso restrito a clientes.', 'error')
         return redirect(url_for('login'))
 
-    cliente = Cliente.query.get(cliente_id)
-    if not cliente:
-        flash('Cliente não encontrado.', 'error')
-        return redirect(url_for('login'))
-
-    agendamentos = Agendamento.query.filter_by(idCliente=cliente.idCliente).all()
+    agendamentos = Agendamento.query.filter_by(idCliente=current_user.idCliente).all()
     return render_template('historico.html', agendamentos=agendamentos)
+
 
 @app.route('/profissional/inicio')
 @login_required
@@ -302,7 +308,13 @@ def cadastrar_servico():
         flash('Serviço cadastrado com sucesso.', 'success')
         return redirect(url_for('admin_servicos'))
 
-    return render_template('cadastrar-servico.html', form=form, titulo_pagina='Cadastrar Serviço')
+    return render_template(
+    'cadastrar-servico.html',
+    form=form,
+    titulo_pagina='Cadastrar Serviço',
+    texto_botao='Cadastrar Serviço'
+)
+
 
 @app.route('/admin/editar-servico/<int:servico_id>', methods=['GET', 'POST'])
 @login_required
@@ -322,7 +334,13 @@ def editar_servico(servico_id):
         flash('Serviço atualizado com sucesso!', 'success')
         return redirect(url_for('admin_servicos'))
 
-    return render_template('cadastrar-servico.html', form=form, titulo_pagina='Editar Serviço')
+    return render_template(
+    'cadastrar-servico.html',
+    form=form,
+    titulo_pagina='Editar Serviço',
+    texto_botao='Salvar Alterações'
+)
+
 
 @app.route('/admin/cadastrar-profissional', methods=['GET', 'POST'])
 @login_required
@@ -413,7 +431,8 @@ def atribuir_servico(profissional_id):
 
     return redirect(url_for('servico_profissional', profissional_id=profissional_id))
 
-
+from datetime import datetime, timedelta
+from flask import flash
 
 @app.route('/admin/profissional/<int:profissional_id>/adicionar-disponibilidade', methods=['POST'])
 @login_required
@@ -421,20 +440,43 @@ def adicionar_disponibilidade(profissional_id):
     if not isinstance(current_user._get_current_object(), Administrador):
         abort(403)
 
+    profissional = Profissional.query.get_or_404(profissional_id)
     agenda_form = AgendaForm()
-    if agenda_form.validate_on_submit():
-        nova_agenda = Agenda(
-            idProfissional=profissional_id,
-            diaSemana=agenda_form.data.data.weekday(),
-            horaInicio=agenda_form.horario.data,
-            horaFim=(datetime.combine(date.today(), agenda_form.horario.data) + timedelta(minutes=60)).time(),
-            status='ativo'
-        )
-        db.session.add(nova_agenda)
-        db.session.commit()
-        flash('Disponibilidade adicionada com sucesso!', 'success')
 
-    return redirect(url_for('servico_profissional', profissional_id=profissional_id))
+    if agenda_form.validate_on_submit():
+        data = agenda_form.data.data
+        hora_inicio = agenda_form.horario_inicio.data
+        hora_fim = agenda_form.horario_fim.data
+
+        if hora_inicio >= hora_fim:
+            flash("A hora de início deve ser menor que a hora de fim.", "error")
+            return redirect(url_for('servico_profissional', profissional_id=profissional.idProfissional))
+
+        hora_atual = datetime.combine(data, hora_inicio)
+        hora_fim_dt = datetime.combine(data, hora_fim)
+
+        registros_criados = 0
+
+        while hora_atual < hora_fim_dt:
+            proxima_hora = hora_atual + timedelta(hours=1)
+
+            nova_agenda = Agenda(
+                idProfissional=profissional.idProfissional,
+                diaSemana=data.weekday(),
+                horaInicio=hora_atual.time(),
+                horaFim=proxima_hora.time(),
+                status='ativo'
+            )
+            db.session.add(nova_agenda)
+            registros_criados += 1
+            hora_atual = proxima_hora
+
+        db.session.commit()
+        flash(f"{registros_criados} horários cadastrados com sucesso!", "success")
+    else:
+        flash("Erro no formulário. Verifique os dados preenchidos.", "error")
+
+    return redirect(url_for('servico_profissional', profissional_id=profissional.idProfissional))
 
 
 @app.route('/admin/editar-profissional/<int:profissional_id>', methods=['GET', 'POST'])
@@ -462,19 +504,21 @@ def editar_profissional(profissional_id):
 @app.route('/profissional/agendar', methods=['GET', 'POST'])
 @login_required
 def profissional_agendar():
+    print("📥 Entrou na rota profissional_agendar com método:", request.method)
+    print("📦 Dados recebidos:", request.form)
+
     if not isinstance(current_user._get_current_object(), Profissional):
         abort(403)
 
     form = AgendamentoForm()
 
-    # Carrega os serviços do profissional
+    # Carrega os serviços do profissional logado
     servicos_profissional = db.session.query(Servico).join(ProfissionalServico).filter(
         ProfissionalServico.idProfissional == current_user.idProfissional
     ).all()
     form.servico_id.choices = [(s.idServico, s.nome) for s in servicos_profissional]
-    form.profissional_id.choices = [(current_user.idProfissional, current_user.nome)]
 
-    # Caso seja um POST só para recarregar os horários
+    # Se for apenas carregar os horários
     if request.method == 'POST' and request.form.get('carregar_horarios') == '1' and form.data.data:
         dia_semana = form.data.data.weekday()
 
@@ -500,7 +544,7 @@ def profissional_agendar():
         horarios_livres = []
         for agenda in agendas:
             if agenda.horaInicio not in horarios_ocupados:
-                horarios_livres.append((agenda.horaInicio, agenda.horaInicio.strftime('%H:%M')))
+                horarios_livres.append((agenda.horaInicio.strftime('%H:%M:%S'), agenda.horaInicio.strftime('%H:%M')))
 
         form.horario.choices = horarios_livres
         return render_template('profissional-agendar.html', form=form)
@@ -512,15 +556,55 @@ def profissional_agendar():
             flash('Por favor, selecione um horário.', 'error')
             return redirect(url_for('profissional_agendar'))
 
-        try:
-            form.horario.data = datetime.strptime(horario_str, '%H:%M').time()
-        except ValueError:
-            flash('Horário inválido.', 'error')
-            return redirect(url_for('profissional_agendar'))
+        # Corrigido: mantém como string, pois SelectField usa string
+        form.horario.data = horario_str
+
+        if not form.data.data:
+            flash("Data não selecionada corretamente.", "error")
+            return redirect(url_for("profissional_agendar"))
+
+        dia_semana = form.data.data.weekday()
+        agendas = Agenda.query.filter_by(
+            idProfissional=current_user.idProfissional,
+            diaSemana=dia_semana,
+            status='ativo'
+        ).all()
+
+        agendados = (
+            Agendamento.query
+            .join(ProfissionalServico)
+            .filter(
+                ProfissionalServico.idProfissional == current_user.idProfissional,
+                Agendamento.data == form.data.data,
+                Agendamento.status.in_(["pendente", "realizado"])
+            )
+            .with_entities(Agendamento.horaInicio)
+            .all()
+        )
+        horarios_ocupados = [a.horaInicio for a in agendados]
+
+        horarios_livres = []
+        for agenda in agendas:
+            if agenda.horaInicio not in horarios_ocupados:
+                horarios_livres.append((agenda.horaInicio.strftime('%H:%M:%S'), agenda.horaInicio.strftime('%H:%M')))
+
+        form.horario.choices = horarios_livres
+
+        # DEBUG
+        print("🧪 DEBUG: form.cliente_nome.data =", form.cliente_nome.data)
+        print("🧪 DEBUG: form.cliente_telefone.data =", form.cliente_telefone.data)
+        print("🧪 DEBUG: form.cliente_email.data =", form.cliente_email.data)
+        print("🧪 DEBUG: form.servico_id.data =", form.servico_id.data)
+        print("🧪 DEBUG: form.data.data =", form.data.data)
+        print("🧪 DEBUG: form.horario.data =", form.horario.data)
+        print("🧪 DEBUG: form.errors =", form.errors)
 
         if form.validate():
+            print("✅ Formulário validado com sucesso!")
+
             cliente = Cliente.query.filter_by(telefone=form.cliente_telefone.data).first()
             if not cliente:
+                print("🆕 Criando novo cliente...")
                 cliente = Cliente(
                     nome=form.cliente_nome.data,
                     telefone=form.cliente_telefone.data,
@@ -541,21 +625,30 @@ def profissional_agendar():
 
             servico = Servico.query.get(form.servico_id.data)
             duracao = timedelta(minutes=servico.duracao)
-            hora_fim = (datetime.combine(date.today(), form.horario.data) + duracao).time()
+
+            # Agora sim converte string para hora
+            hora_inicio = datetime.strptime(form.horario.data, '%H:%M:%S').time()
+            hora_fim = (datetime.combine(date.today(), hora_inicio) + duracao).time()
 
             novo_agendamento = Agendamento(
                 idCliente=cliente.idCliente,
                 idProfissionalServico=profissional_servico.idProfissionalServico,
                 data=form.data.data,
-                horaInicio=form.horario.data,
+                horaInicio=hora_inicio,
                 horaFim=hora_fim,
                 status='pendente'
             )
 
             db.session.add(novo_agendamento)
             db.session.commit()
+
+            print("✅ Agendamento criado e salvo com sucesso.")
             flash('Agendamento realizado com sucesso!', 'success')
             return redirect(url_for('profissional_inicio'))
+
+        else:
+            print("❌ Erros de validação:", form.errors)
+            flash('Erro ao validar os dados do formulário.', 'error')
 
     return render_template('profissional-agendar.html', form=form)
 
@@ -604,3 +697,133 @@ def confirmar_realizacao(agendamento_id):
     # Redireciona para a mesma data que o agendamento era
     data_str = agendamento.data.strftime('%Y-%m-%d')
     return redirect(url_for('profissional_agenda', data=data_str))
+
+@app.route('/perfil-cliente', methods=['GET', 'POST'])
+@login_required
+def perfil_cliente():
+    if not isinstance(current_user._get_current_object(), Cliente):
+        abort(403)
+
+    form = ClientePerfilForm()
+
+    if form.validate_on_submit():
+        cliente = current_user._get_current_object()
+
+        cliente.nome = form.nome.data
+        cliente.telefone = form.telefone.data
+        cliente.email = form.email.data
+
+        if form.nova_senha.data:
+            cliente.set_password(form.nova_senha.data)
+
+        db.session.commit()
+        flash('Perfil atualizado com sucesso!', 'success')
+        return redirect(url_for('perfil_cliente'))
+
+    # Pré-preenche os campos com os dados atuais
+    cliente = current_user._get_current_object()
+    form.nome.data = cliente.nome
+    form.telefone.data = cliente.telefone
+    form.email.data = cliente.email
+
+    return render_template('cliente-perfil.html', form=form, cliente=cliente)
+
+@app.route('/admin/clientes')
+@login_required
+def admin_clientes():
+    if not isinstance(current_user._get_current_object(), Administrador):
+        abort(403)
+
+    clientes = Cliente.query.all()
+    return render_template('clientes.html', clientes=clientes)
+
+@app.route('/admin/cliente/<int:cliente_id>', methods=['GET', 'POST'])
+@login_required
+def admin_perfil_cliente(cliente_id):
+    if not isinstance(current_user._get_current_object(), Administrador):
+        abort(403)
+
+    cliente = Cliente.query.get_or_404(cliente_id)
+    form = ClienteAdminForm(obj=cliente)  # pré-preenche
+
+    if form.validate_on_submit():
+        cliente.nome = form.nome.data
+        cliente.telefone = form.telefone.data
+        cliente.email = form.email.data
+        db.session.commit()
+        flash('Dados do cliente atualizados com sucesso!', 'success')
+        return redirect(url_for('admin_perfil_cliente', cliente_id=cliente.idCliente))
+
+    return render_template('perfil-cliente.html', cliente=cliente, form=form)
+
+@app.route('/admin/cliente/<int:cliente_id>/excluir', methods=['POST'])
+@login_required
+def admin_excluir_cliente(cliente_id):
+    if not isinstance(current_user._get_current_object(), Administrador):
+        abort(403)
+
+    cliente = Cliente.query.get_or_404(cliente_id)
+
+    # Exclui todos os agendamentos vinculados ao cliente
+    Agendamento.query.filter_by(idCliente=cliente.idCliente).delete()
+
+    # Remove o cliente
+    db.session.delete(cliente)
+    db.session.commit()
+
+    flash('Cliente e seus agendamentos foram excluídos com sucesso.', 'success')
+    return redirect(url_for('admin_inicio'))  # ou 'admin_clientes' se você tiver uma lista de clientes
+
+@app.route('/admin/profissional/<int:profissional_id>/excluir', methods=['POST'])
+@login_required
+def excluir_profissional(profissional_id):
+    if not isinstance(current_user._get_current_object(), Administrador):
+        abort(403)
+
+    profissional = Profissional.query.get_or_404(profissional_id)
+
+    # 1. Buscar todos os vínculos de serviços com esse profissional
+    prof_servicos = ProfissionalServico.query.filter_by(idProfissional=profissional.idProfissional).all()
+
+    # 2. Para cada vínculo, excluir os agendamentos relacionados
+    for ps in prof_servicos:
+        Agendamento.query.filter_by(idProfissionalServico=ps.idProfissionalServico).delete()
+
+    # 3. Excluir os vínculos com os serviços
+    ProfissionalServico.query.filter_by(idProfissional=profissional.idProfissional).delete()
+
+    # 4. Excluir as agendas do profissional
+    Agenda.query.filter_by(idProfissional=profissional.idProfissional).delete()
+
+    # 5. Excluir o próprio profissional
+    db.session.delete(profissional)
+    db.session.commit()
+
+    flash("Profissional excluído com sucesso.", "success")
+    return redirect(url_for('admin_profissionais'))
+
+@app.route('/admin/servico/<int:servico_id>')
+@login_required
+def perfil_servico(servico_id):
+    servico = Servico.query.get_or_404(servico_id)
+    return render_template('perfil-servico.html', servico=servico)
+
+@app.route('/admin/servico/<int:servico_id>/excluir', methods=['POST'])
+@login_required
+def excluir_servico(servico_id):
+    servico = Servico.query.get_or_404(servico_id)
+
+    # Você pode adicionar verificações aqui, como se é admin:
+    if not current_user.get_id().startswith("admin-"):
+        flash("Apenas administradores podem excluir serviços.", "error")
+        return redirect(url_for("index"))
+
+    try:
+        db.session.delete(servico)
+        db.session.commit()
+        flash(f"Serviço '{servico.nome}' excluído com sucesso!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Erro ao excluir serviço: {str(e)}", "error")
+
+    return redirect(url_for('admin_servicos'))  # Redireciona para a lista de serviços

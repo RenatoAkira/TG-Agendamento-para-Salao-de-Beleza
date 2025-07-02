@@ -5,39 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Serviços</title>
   <link rel="stylesheet" href="/static/css/style-servicos.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
 </head>
 <body>
   <header>
     <div class="logo">
       <img src="/static/img/LogoSalao2.png" width="500px" alt="Logo do Salão">
     </div>
+    <a class="btn-inicio" href="{{ url_for('cliente_inicio') }}">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
     <h1>Serviços</h1>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <div class="search-container">
-      <form method="GET">
-        <input type="text" name="search" placeholder="Pesquisar serviços..." value="{{ search }}">
-        <button type="submit">🔍</button>
+      <form onsubmit="return false;">
+        <input type="text" id="searchInput" placeholder="Pesquisar serviços...">
+        <button type="button">🔍</button>
       </form>
     </div>
 
-    <div class="lista-servicos">
+    <div class="lista-servicos" id="listaServicos">
       {% if servicos %}
         {% for servico in servicos %}
           <div class="servico">
             <div class="info-servico">
-              <h3>{{ servico.nome }}</h3>
+              <h3 class="servico-nome">{{ servico.nome }}</h3>
               <p>{{ servico.descricao }}</p>
               <div class="detalhes">
                 <span class="preco">R$ {{ servico.preco }}</span>
                 <span class="duracao">{{ servico.duracao }} minutos</span>
               </div>
             </div>
-            <a href="{{ url_for('escolher_profissional', servico_id=servico.idServico) }}">
-              <button class="btn-agendar">Agendar</button>
-            </a>
+
+            {% if current_user.is_authenticated %}
+              <a href="{{ url_for('escolher_profissional', servico_id=servico.idServico) }}">
+                <button class="btn-agendar">Agendar</button>
+              </a>
+            {% else %}
+              <a href="{{ url_for('login') }}?next={{ request.path }}" onclick="alert('Você precisa estar logado para agendar um serviço!')">
+                <button class="btn-agendar">Agendar</button>
+              </a>
+            {% endif %}
           </div>
         {% endfor %}
       {% else %}
@@ -45,5 +66,18 @@
       {% endif %}
     </div>
   </main>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const servicos = document.querySelectorAll('.servico');
+
+    searchInput.addEventListener('input', function () {
+      const filtro = this.value.toLowerCase();
+      servicos.forEach(servico => {
+        const nome = servico.querySelector('.servico-nome').textContent.toLowerCase();
+        servico.style.display = nome.includes(filtro) ? 'flex' : 'none';
+      });
+    });
+  </script>
 </body>
 </html>

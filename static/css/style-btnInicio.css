@@ -1,4 +1,16 @@
+header {
+  position: relative;
+  padding: 30px 0;
+  display: flex;
+  justify-content: center; /* centraliza a logo */
+  align-items: center;
+}
+
 .btn-inicio {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
   text-decoration: none;
   background-color: #8b2969;
   color: white;

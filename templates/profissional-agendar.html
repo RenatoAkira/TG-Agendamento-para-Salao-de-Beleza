@@ -5,26 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Agendar Serviço para Cliente</title>
   <link rel="stylesheet" href="/static/css/style-profissional-agendar.css" />
+  <link rel="stylesheet" href="/static/css/style-btnInicio.css" />
   <script>
     function carregarHorarios() {
-      document.getElementById('carregar_horarios').value = '1';
-      document.getElementById('form-agendamento').submit();
-    }
-
-    function prepararParaAgendar() {
-      document.getElementById('carregar_horarios').value = '0';
+      const form = document.getElementById('form-agendamento');
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'carregar_horarios';
+      input.value = '1';
+      form.appendChild(input);
+      form.submit();
     }
   </script>
 </head>
 <body>
   <header>
     <h1>Agendar Serviço</h1>
+    <a class="btn-inicio" href="{{ url_for('profissional_inicio') }}">
+            <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+    </a>
   </header>
 
   <main>
     <form id="form-agendamento" method="POST">
       {{ form.hidden_tag() }}
-      <input type="hidden" name="carregar_horarios" id="carregar_horarios" value="0">
+
+      <!-- Exibe erros do formulário -->
+      {% if form.errors %}
+        <ul class="form-errors">
+          {% for field, errors in form.errors.items() %}
+            {% for error in errors %}
+              <li><strong>{{ field }}:</strong> {{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      {% endif %}
 
       <label for="{{ form.cliente_nome.id }}">{{ form.cliente_nome.label.text }}</label>
       {{ form.cliente_nome(class_='form-control', id=form.cliente_nome.id) }}
@@ -52,7 +67,10 @@
       {% endif %}
 
       <div class="btn-confirmar-container">
-        <button type="submit" class="btn-confirmar" onclick="prepararParaAgendar();">{{ form.submit.label }}</button>
+        <!-- Botão que envia carregar_horarios=0 -->
+        <button type="submit" name="carregar_horarios" value="0" class="btn-confirmar">
+          Agendar
+        </button>
       </div>
     </form>
   </main>

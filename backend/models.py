@@ -4,7 +4,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from backend import db
 
-class Cliente(db.Model):
+class Cliente(db.Model, UserMixin):
     __tablename__ = 'clientes'
 
     idCliente = db.Column(db.Integer, primary_key=True)
@@ -20,7 +20,7 @@ class Cliente(db.Model):
 
     def check_password(self, senha):
         return check_password_hash(self.senha_hash, senha)
-    
+
     def get_id(self):
         return f"cliente-{self.idCliente}"
 
