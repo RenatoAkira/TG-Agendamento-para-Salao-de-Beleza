@@ -11,9 +11,20 @@
   <header>
     <h1>Perfil do Cliente</h1>
     <a class="btn-inicio" href="{{ url_for('admin_inicio') }}">
-            <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
+      <i class="fas fa-home"></i> <img src="/static/img/home.png" alt="Página Inicial">
     </a>
   </header>
+
+  <!-- Flashs exibidos logo abaixo do cabeçalho -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="flash {{ 'flash-' + category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 
   <main>
     <div class="perfil-cliente">

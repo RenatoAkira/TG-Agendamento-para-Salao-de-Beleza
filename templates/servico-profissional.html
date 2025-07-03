@@ -20,18 +20,25 @@
       {% if messages %}
         <div class="flash-messages">
           {% for category, message in messages %}
-            <div class="alert {{ category }}">{{ message }}</div>
+            <div class="flash {{ 'flash-' + category }}">{{ message }}</div>
           {% endfor %}
         </div>
       {% endif %}
     {% endwith %}
 
     <div class="perfil">
-      <img src="{{ url_for('static', filename='img/default-user.png') }}" alt="Foto do Profissional" class="foto-perfil" />
+      <img src="{{ url_for('static', filename=profissional.foto) if profissional.foto else url_for('static', filename='img/default-user.png') }}"
+           alt="Foto do Profissional" class="foto-perfil" />
       <div class="dados-profissional">
         <h2>{{ profissional.nome }}</h2>
         <p><strong>Telefone:</strong> {{ profissional.telefone }}</p>
         <p><strong>E-mail:</strong> {{ profissional.email }}</p>
+
+        <!-- Formulário para upload de foto -->
+        <form method="POST" action="{{ url_for('upload_foto_profissional', profissional_id=profissional.idProfissional) }}" enctype="multipart/form-data">
+          <input type="file" name="foto" accept="image/*" required>
+          <button type="submit" class="btn-editar">Enviar Foto</button>
+        </form>
 
         <div class="acoes-profissional">
           <a href="{{ url_for('editar_profissional', profissional_id=profissional.idProfissional) }}">

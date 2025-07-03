@@ -25,13 +25,21 @@ class LoginForm(FlaskForm):
     senha = PasswordField('Senha', validators=[DataRequired()])
     submit = SubmitField('Entrar')
 
-class CadastroProfissionalForm(FlaskForm):
+class BaseProfissionalForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired()])
     telefone = StringField('Telefone', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField()
+
+class CadastroProfissionalForm(BaseProfissionalForm):
     senha = PasswordField('Senha', validators=[DataRequired(), Length(min=6)])
     confirmar_senha = PasswordField('Confirmar Senha', validators=[DataRequired(), EqualTo('senha')])
     submit = SubmitField('Cadastrar Profissional')
+
+class EdicaoProfissionalForm(BaseProfissionalForm):
+    senha = PasswordField('Senha', validators=[Optional(), Length(min=6)])
+    confirmar_senha = PasswordField('Confirmar Senha', validators=[Optional(), EqualTo('senha')])
+    submit = SubmitField('Salvar Alterações')
 
 class CadastroServicoForm(FlaskForm):
     nome = StringField('Nome do Serviço', validators=[DataRequired()])

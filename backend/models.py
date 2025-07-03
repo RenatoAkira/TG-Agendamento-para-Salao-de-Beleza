@@ -49,6 +49,7 @@ class Profissional(UserMixin, db.Model):
     telefone = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     senha_hash = db.Column(db.String(256), nullable=False)
+    foto = db.Column(db.String(255), nullable=True)
 
     servicos = db.relationship('ProfissionalServico', back_populates='profissional', lazy=True)
     agendas = db.relationship('Agenda', back_populates='profissional', lazy=True)
@@ -105,6 +106,7 @@ class Agendamento(db.Model):
     data = db.Column(db.Date, nullable=False)
     horaInicio = db.Column(db.Time, nullable=False)
     horaFim = db.Column(db.Time, nullable=False)
+    data_criacao = db.Column(db.DateTime, default=datetime.utcnow)
     status = db.Column(db.String(20), default='pendente')
 
     cliente = db.relationship('Cliente', back_populates='agendamentos')

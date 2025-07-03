@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +24,7 @@
         <div class="container-profissionais">
             {% for profissional in profissionais %}
             <div class="card-profissional" data-nome="{{ profissional.nome }}">
-                <img src="/static/img/joao.PNG" alt="{{ profissional.nome }}">
+                <img src="{{ url_for('static', filename=profissional.foto) if profissional.foto else url_for('static', filename='img/joao.PNG') }}" alt="{{ profissional.nome }}">
                 <p>{{ profissional.nome }}</p>
                 <a href="{{ url_for('selecionar_horario', profissional_id=profissional.idProfissional, servico_id=servico.idServico) }}">
                     <button class="selecionar">Selecionar</button>

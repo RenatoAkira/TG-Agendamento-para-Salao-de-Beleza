@@ -4,7 +4,7 @@ from flask import render_template, request, redirect, url_for, flash, session, j
 from backend import db, bcrypt, login_manager
 from flask import current_app as app
 from backend.models import Cliente, Profissional, Administrador, Servico, ProfissionalServico, Agenda, Agendamento
-from backend.forms import ClienteAdminForm, ClientePerfilForm, ClienteRegisterForm, LoginForm, CadastroProfissionalForm, CadastroServicoForm, AgendamentoForm, AgendaForm, AtribuirServicoForm
+from backend.forms import ClienteAdminForm, ClientePerfilForm, ClienteRegisterForm, EdicaoProfissionalForm, LoginForm, CadastroProfissionalForm, CadastroServicoForm, AgendamentoForm, AgendaForm, AtribuirServicoForm
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -215,7 +215,12 @@ def historico():
         flash('Acesso restrito a clientes.', 'error')
         return redirect(url_for('login'))
 
-    agendamentos = Agendamento.query.filter_by(idCliente=current_user.idCliente).all()
+    agendamentos = (
+        Agendamento.query
+        .filter_by(idCliente=current_user.idCliente)
+        .order_by(Agendamento.data_criacao.desc())
+        .all()
+    )
     return render_template('historico.html', agendamentos=agendamentos)
 
 
@@ -400,7 +405,35 @@ def servico_profissional(profissional_id):
 
     return render_template('servico-profissional.html', profissional=profissional, form=form, agenda_form=agenda_form)
 
+@app.route('/admin/profissional/<int:profissional_id>/upload-foto', methods=['POST'])
+@login_required
+def upload_foto_profissional(profissional_id):
+    if not isinstance(current_user._get_current_object(), Administrador):
+        abort(403)
 
+    profissional = Profissional.query.get_or_404(profissional_id)
+    foto = request.files.get('foto')
+
+    if not foto:
+        flash("Nenhuma imagem foi enviada.", "error")
+        return redirect(url_for('servico_profissional', profissional_id=profissional_id))
+
+    if foto.filename == '':
+        flash("Nome do arquivo inválido.", "error")
+        return redirect(url_for('servico_profissional', profissional_id=profissional_id))
+
+    filename = f"fotos_profissionais/prof_{profissional_id}_{foto.filename}"
+    caminho_completo = os.path.join(app.static_folder, filename)
+
+    # Cria o diretório se não existir
+    os.makedirs(os.path.dirname(caminho_completo), exist_ok=True)
+
+    foto.save(caminho_completo)
+    profissional.foto = filename
+    db.session.commit()
+
+    flash("Foto do profissional atualizada com sucesso!", "success")
+    return redirect(url_for('servico_profissional', profissional_id=profissional_id))
 
 @app.route('/admin/atribuir-servico/<int:profissional_id>', methods=['POST'])
 @login_required
@@ -486,7 +519,7 @@ def editar_profissional(profissional_id):
         abort(403)
 
     profissional = Profissional.query.get_or_404(profissional_id)
-    form = CadastroProfissionalForm(obj=profissional)
+    form = EdicaoProfissionalForm(obj=profissional)
 
     if form.validate_on_submit():
         profissional.nome = form.nome.data
@@ -770,7 +803,7 @@ def admin_excluir_cliente(cliente_id):
     db.session.commit()
 
     flash('Cliente e seus agendamentos foram excluídos com sucesso.', 'success')
-    return redirect(url_for('admin_inicio'))  # ou 'admin_clientes' se você tiver uma lista de clientes
+    return redirect(url_for('admin_clientes'))  # ou 'admin_clientes' se você tiver uma lista de clientes
 
 @app.route('/admin/profissional/<int:profissional_id>/excluir', methods=['POST'])
 @login_required

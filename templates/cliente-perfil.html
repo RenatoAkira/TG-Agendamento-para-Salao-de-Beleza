@@ -50,6 +50,7 @@
   </header>
 
   <main>
+  <div class="perfil-cliente">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="flash-messages">
@@ -60,34 +61,33 @@
       {% endif %}
     {% endwith %}
 
-    <div class="perfil-cliente">
-      <div class="dados-cliente">
-        <h2>{{ cliente.nome }}</h2>
-        <p><strong>Telefone:</strong> {{ cliente.telefone }}</p>
-        <p><strong>E-mail:</strong> {{ cliente.email }}</p>
-      </div>
-
-      <form class="form-perfil" method="POST">
-        {{ form.hidden_tag() }}
-
-        <label>{{ form.nome.label }}</label>
-        {{ form.nome(class_='form-control', value=cliente.nome) }}
-
-        <label>{{ form.telefone.label }}</label>
-        {{ form.telefone(class_='form-control', value=cliente.telefone) }}
-
-        <label>{{ form.email.label }}</label>
-        {{ form.email(class_='form-control', value=cliente.email) }}
-
-        <label>{{ form.nova_senha.label }}</label>
-        {{ form.nova_senha(class_='form-control') }}
-
-        <label>{{ form.confirmar_senha.label }}</label>
-        {{ form.confirmar_senha(class_='form-control') }}
-
-        <button type="submit">{{ form.submit.label }}</button>
-      </form>
+    <div class="dados-cliente">
+      <h2>{{ cliente.nome }}</h2>
+      <p><strong>Telefone:</strong> {{ cliente.telefone }}</p>
+      <p><strong>E-mail:</strong> {{ cliente.email }}</p>
     </div>
-  </main>
+
+    <form class="form-perfil" method="POST">
+      {{ form.hidden_tag() }}
+
+      <label>{{ form.nome.label }}</label>
+      {{ form.nome(class_='form-control', value=cliente.nome) }}
+
+      <label>{{ form.telefone.label }}</label>
+      {{ form.telefone(class_='form-control', value=cliente.telefone) }}
+
+      <label>{{ form.email.label }}</label>
+      {{ form.email(class_='form-control', value=cliente.email) }}
+
+      <label>{{ form.nova_senha.label }}</label>
+      {{ form.nova_senha(class_='form-control') }}
+
+      <label>{{ form.confirmar_senha.label }}</label>
+      {{ form.confirmar_senha(class_='form-control') }}
+
+      <button type="submit">{{ form.submit.label }}</button>
+    </form>
+  </div>
+</main>
 </body>
 </html>
